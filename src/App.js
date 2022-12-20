@@ -19,15 +19,15 @@ export default function App() {
 	!document.cookie.match(/lastId/) && setCookie("lastId", 0)
 	// ? default cookies
 
-	// ! wordChecked,	words, lastId
-	const [wordChecked, setWordChecked] = useState(false)
+	// ! wordTranslated,	words, lastId
+	const [wordTranslated, setWordTranslated] = useState(false)
 	const [words, setWords] = useState(data)
 	const [lastId, setLastId] = useState(Number(getCookie("lastId")))
 
 	useEffect(() => {
 		setCookie("lastId", lastId)
 	}, [lastId])
-	// ? wordChecked,	words, lastId
+	// ? wordTranslated,	words, lastId
 	// ! add1, add2, answer, answerStatus, lastCorrectAnswer
 	const [add1, setAdd1] = useState("")
 	const [add2, setAdd2] = useState("")
@@ -47,9 +47,10 @@ export default function App() {
 			fetch(`https://api.mymemory.translated.net/get?q=${add1}!&langpair=en|ru`)
 				.then((response) => response.json())
 				.then((responseText) => {
+					console.log(responseText.matches.map(match => console.log(match.translation)))
 					setAdd2(responseText.responseData.translatedText)
 				});
-			setWordChecked(true)
+			setWordTranslated(true)
 		}
 	}
 	// ? translate
@@ -67,13 +68,14 @@ export default function App() {
 
 		let exist
 		words.map(word => word.toTranslate.toLowerCase().trim() == add1.toLowerCase().trim() && (exist = true))
-		
+
 		if (!exist) {
 			setLastId(prev => prev + 1)
 			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new" }]))
 			localStorage.setItem(lastId + 1, JSON.stringify({ id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new" }))
 			setAdd1("")
 			setAdd2("")
+			setWordTranslated(false)
 		} else {
 			alert("word already exists!");
 		}
@@ -93,7 +95,7 @@ export default function App() {
 
 	// ! RETURN
 	return (
-		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordChecked, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, statusBlockToggle, setStatusBlockToggle }} >
+		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, statusBlockToggle, setStatusBlockToggle }} >
 
 			<div className="StatusBlocks">
 				<StatusBlock status="new" num={calcNum("new") || 0} />
