@@ -17,6 +17,7 @@ export default function App() {
 
 	// ! default cookies
 	!document.cookie.match(/lastId/) && setCookie("lastId", 0)
+	!document.cookie.match(/tags/) && setCookie("tags", "")
 	// ? default cookies
 
 	// ! wordTranslated,	words, lastId
@@ -41,19 +42,28 @@ export default function App() {
 	const [lastCorrectAnswer, setLastCorrectAnswer] = useState("")
 	// ? add1, add2, answer, answerStatus, lastCorrectAnswer
 
-	// ! translate
+	// ! translate, tags, cookieTags
+
+	const [tags, setTags] = useState([])
+
 	function translate() {
 		if (add1.trim()) {
 			fetch(`https://api.mymemory.translated.net/get?q=${add1}!&langpair=en|ru`)
 				.then((response) => response.json())
 				.then((responseText) => {
-					console.log(responseText.matches.map(match => console.log(match.translation)))
+					// ! cookieTags
+					const cookieTags = []
+					responseText.matches.map(tag => cookieTags.push(tag.translation))
+					setCookie("tags", JSON.stringify(cookieTags))
+					setTags(eval(getCookie("tags")))
+					// ? cookieTags
+
 					setAdd2(responseText.responseData.translatedText)
 				});
 			setWordTranslated(true)
 		}
 	}
-	// ? translate
+	// ? translate, tags, cookieTags
 
 	// ! addFn
 	function addFn() {
@@ -66,16 +76,21 @@ export default function App() {
 			return
 		}
 
+		// ! synonym
+		const synonym = []
+		document.querySelectorAll(".Tag_active").forEach(tag => synonym.push(tag.value))
+
 		let exist
 		words.map(word => word.toTranslate.toLowerCase().trim() == add1.toLowerCase().trim() && (exist = true))
 
 		if (!exist) {
 			setLastId(prev => prev + 1)
-			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new" }]))
-			localStorage.setItem(lastId + 1, JSON.stringify({ id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new" }))
+			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new", synonym: synonym }]))
+			localStorage.setItem(lastId + 1, JSON.stringify({ id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new", synonym: JSON.stringify(synonym) }))
 			setAdd1("")
 			setAdd2("")
 			setWordTranslated(false)
+			setTags([])
 		} else {
 			alert("word already exists!");
 		}
@@ -95,7 +110,7 @@ export default function App() {
 
 	// ! RETURN
 	return (
-		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, statusBlockToggle, setStatusBlockToggle }} >
+		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, statusBlockToggle, setStatusBlockToggle, tags }} >
 
 			<div className="StatusBlocks">
 				<StatusBlock status="new" num={calcNum("new") || 0} />

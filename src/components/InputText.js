@@ -4,6 +4,7 @@ export default function InputText(props) {
 
 	return (
 		<input
+			className={props.className}
 			type="text"
 			placeholder={props.placeholder}
 			name={props.name}

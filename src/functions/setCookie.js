@@ -1,5 +1,5 @@
 export default function setCookie(name, value) {
 	return (
-		document.cookie = `${name}={${value}}`
+		document.cookie = `${name}=&${value}&`
 	)
 }

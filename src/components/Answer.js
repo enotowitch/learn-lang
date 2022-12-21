@@ -2,7 +2,9 @@ import React, { useContext, useState, useEffect } from "react"
 import { Context } from "./../context"
 import AnswerBlock from "./AnswerBlock"
 import Button from "./Button"
+import IconText from "./IconText"
 import InputText from "./InputText"
+import Tags from "./Tags"
 
 export default function Answer() {
 
@@ -97,7 +99,7 @@ export default function Answer() {
 		}
 		// ? calculatedStatus, setMistake
 	}
-	
+
 	// ! deleteWord
 	function deleteWord() {
 		const translated = document.querySelector('.translated__word').innerText
@@ -109,7 +111,10 @@ export default function Answer() {
 			localStorage.removeItem(curStatusWords[wordNum].id)
 		}
 	}
-	
+
+	// ! showTags
+	const [showTags, setShowTags] = useState(false)
+
 	// ! other
 	// drop answer input text if word changed, correct answer given
 	useEffect(() => {
@@ -117,6 +122,8 @@ export default function Answer() {
 	}, [wordNum, lastCorrectAnswer])
 	// go to first word if no next word
 	!curStatusWord && curStatusWords.length > 0 && setWordNum(0)
+	// tags
+	const tags = curStatusWords[wordNum] && eval(curStatusWords[wordNum].synonym)
 
 
 	// ! RETURN
@@ -137,6 +144,20 @@ export default function Answer() {
 								<Button text="delete" />
 							</div>
 						</div>
+
+						{tags.length > 0 &&
+							<>
+								<div onClick={() => setShowTags(prev => !prev)}>
+									<IconText src="arrow" text="Synonym" rotate={showTags} />
+								</div>
+
+								{showTags &&
+									<div className="Tags">
+										<Tags tags={tags} mode="read" />
+									</div>
+								}
+							</>
+						}
 
 						<div className="answerBlocks">
 							{answerBlocks}
