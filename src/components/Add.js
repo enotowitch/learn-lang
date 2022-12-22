@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { Context } from "../context"
 import Button from "./Button"
 import Input from "./Input"
@@ -14,7 +14,11 @@ export default function Add() {
 	const [showTags, setShowTags] = useState(true)
 	// ! showUsage
 	const [showUsage, setShowUsage] = useState(true)
-
+	// ! active usage
+	useEffect(() => {
+		const u = document.querySelector('.usage')
+		usage.trim().length > 0 ? u && u.classList.add('usage_active') : u && u.classList.remove('usage_active')
+	}, [usage, []])
 
 	// ! RETURN
 	return (

@@ -4,6 +4,7 @@
 // font
 $primaryFont: Montserrat;
 $secondaryFont: Roboto;
+$inputFontSize: 1.2rem;
 // color
 $darkColor: #000;
 $activeColor: #ACE1AF;
@@ -19,9 +20,21 @@ $inputWidth: 150px;
 [type="text"], textarea {
 	font-family: $secondaryFont;
 }
+// ! cursor, hover
+button, .StatusBlock, .IconText, .Tag, .rules{
+	cursor: pointer;
+	&:hover{
+		background: lighten($activeColor, 15%);
+	}
+	&:active{
+		background: lighten($activeColor, 5%);
+	}
+}
+// ? cursor, hover
 
 
 
+// ! tags
 button {
 	border-radius: 20px;
 	padding: 2px 6px;
@@ -29,14 +42,19 @@ button {
 	background: transparent;
 	font-size: 1rem;
 }
-.ml{
-	margin-left: 15px;
-}
 [type="text"] {
 	display: block;
 	border: none;
 	border-bottom: 1px solid $darkColor;
-	font-size: 1.2rem;
+	font-size: $inputFontSize;
+}
+textarea{
+	text-indent: 4px;
+}
+// ? tags
+
+.ml{
+	margin-left: 15px;
 }
 .StatusBlock {
 	display: inline-flex;
@@ -111,7 +129,7 @@ button {
 	min-width: $inputWidth;
 	width: $inputWidth;
 	font-size: 1.1rem;
-	margin-bottom: 0;
+	margin-bottom: 15px;
 	span{
 		margin-left: 4px;
 		position: absolute;
@@ -138,15 +156,28 @@ button {
 		font-weight: 700;
 		width: 100%;
 		text-align: center;
+		cursor: default;
+		&:hover{
+			background: transparent;
+		}
 	}
 }
 .usage {
-	min-width: $inputWidth;
-	width: $inputWidth;
+	min-width: $inputWidth * 2;
+	width: $inputWidth * 2;
+	height: $inputWidth;
+	font-size: $inputFontSize;
+	resize: none;
+	&_active{
+		background: $activeColor;
+	}
 	&_read {
 		font-weight: 700;
 		margin: 4px auto;
 		padding: 4px;
 		text-align: center;
+		font-size: 1rem;
+		height: auto;
+		cursor: default;
 	}
 }

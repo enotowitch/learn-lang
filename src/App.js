@@ -80,9 +80,9 @@ export default function App() {
 
 		// ! synonym
 		const synonym = []
-		document.querySelectorAll(".Tag_active").forEach(tag => synonym.push(tag.value))
+		document.querySelectorAll(".Tag_active").forEach(tag => tag.value.trim() && synonym.push(tag.value))
 		// ! usage
-		const usage = document.querySelector(".usage").value
+		const usage = document.querySelector(".usage").value.trim()
 
 		let exist
 		words.map(word => word.toTranslate.toLowerCase().trim() === add1.toLowerCase().trim() && (exist = true))
@@ -95,6 +95,7 @@ export default function App() {
 			setAdd2("")
 			setWordTranslated(false)
 			setTags([])
+			setUsage("")
 		} else {
 			alert("word already exists!");
 		}

@@ -18,24 +18,25 @@ export default function Answer() {
 	}, [answerStatus])
 	// ? wordNum
 
-	// ! curStatusWords, curStatusWord, mistake 
-	let curStatusWords = []
-	words.map(word => word.status === answerStatus && (curStatusWords.push(word)))
+	// ! curWords, word, wordToTranslate, mistake 
+	let curWords = []
+	words.map(word => word.status === answerStatus && (curWords.push(word)))
 
-	const curStatusWord = curStatusWords[wordNum] && curStatusWords[wordNum].toTranslate
+	const word = curWords[wordNum]
+	const wordToTranslate = word && word.toTranslate
 
 	const [mistake, setMistake] = useState(0)
-	// new StatusBlock visited, correct answer => setMistake(0)
+	// word changed, new StatusBlock visited, correct answer => setMistake(0)
 	useEffect(() => {
 		setMistake(0)
-	}, [answerStatus, lastCorrectAnswer])
-	// ? curStatusWords, curStatusWord, mistake 
+	}, [wordNum, answerStatus, lastCorrectAnswer])
+	// ? curWords, word, wordToTranslate, mistake 
 
 	// ! answerBlocks length & put '?' to answerBlock 
 	let calcQuestionMarks = []
 
-	if (curStatusWord) {
-		for (let i = 0; i < curStatusWord.length; i++) {
+	if (wordToTranslate) {
+		for (let i = 0; i < wordToTranslate.length; i++) {
 			calcQuestionMarks.push('?')
 		}
 	}
@@ -52,8 +53,8 @@ export default function Answer() {
 
 	// ! correct letters
 	let toTranslateArr, answerArr, letterArr
-	if (curStatusWord) {
-		toTranslateArr = curStatusWord.split('')
+	if (wordToTranslate) {
+		toTranslateArr = wordToTranslate.split('')
 		answerArr = answer.split('')
 		letterArr = []
 	}
@@ -76,7 +77,7 @@ export default function Answer() {
 
 		// WRONG ANSWER
 		// ! put 1,2,3... letter to answerBlock & to answer input
-		if (curStatusWord !== answer) {
+		if (wordToTranslate !== answer) {
 			setMistake(prev => prev + 1)
 			letterArr[mistake] = toTranslateArr[mistake]
 			setAnswer(letterArr.join(''))
@@ -90,7 +91,7 @@ export default function Answer() {
 		// ? rules logic
 
 		// CORRECT ANSWER
-		if (curStatusWord === answer) {
+		if (wordToTranslate === answer) {
 			words.map(wordObj => {
 				wordObj.toTranslate === answer && (wordObj.status = calculatedStatus)
 				wordObj.toTranslate === answer && localStorage.setItem(wordObj.id, JSON.stringify(wordObj))
@@ -104,13 +105,14 @@ export default function Answer() {
 	function deleteWord() {
 		const translated = document.querySelector('.translated__word').innerText
 		if (window.confirm(`Delete word "${translated}"?`)) {
-			const deleted = words.filter(word => {
-				return word.id != curStatusWords[wordNum].id
+			const deleted = words.filter(w => {
+				return w.id != word.id
 			})
 			setWords(deleted)
-			localStorage.removeItem(curStatusWords[wordNum].id)
+			localStorage.removeItem(word.id)
 		}
 	}
+	// ? deleteWord
 
 	// ! showTags,	showUsage
 	const [showTags, setShowTags] = useState(false)
@@ -118,8 +120,26 @@ export default function Answer() {
 	// ? showTags,	showUsage
 
 	// ! tags, usage
-	const tags = curStatusWords[wordNum] && eval(curStatusWords[wordNum].synonym)
-	const usage = curStatusWords[wordNum] && curStatusWords[wordNum].usage
+	const tags = word && eval(word.synonym)
+
+	let usage = word && word.usage // they called their daughter Hannah
+	if (wordToTranslate) {
+		for (let i = 1; i <= wordToTranslate.length; i++) {
+			const regExp = new RegExp(wordToTranslate.slice(0, i + 1)) // match first 2 letters & more: /ca/, /cal/, /call/
+			if (usage.match(regExp)) {
+				const replaceNum = usage.match(regExp).index // 5 "they "called
+				const regExp2 = new RegExp(`.{${replaceNum}}`) // /.{5}/
+				const found = usage.replace(regExp2, "").match(/\S+/)[0] // called
+				// ! more complex; maybe use later
+				// const calcQuestionMarks = wordToTranslate.split("").map(letter => letter.replace(letter, "?")).join("") // call = ????
+				// const slice = found.slice(0, calcQuestionMarks.length) // call
+				// const Found = found.replace(slice, calcQuestionMarks) // called = ????ed
+				// usage = usage.replace(found, Found) // they ????ed their daughter Hannah
+				// ? more complex
+				usage = usage.replace(found, "?") // they ? their daughter Hannah
+			}
+		}
+	}
 	// ? tags, usage
 
 	// ! other
@@ -128,7 +148,7 @@ export default function Answer() {
 		setAnswer("")
 	}, [wordNum, lastCorrectAnswer])
 	// go to first word if no next word
-	!curStatusWord && curStatusWords.length > 0 && setWordNum(0)
+	!wordToTranslate && curWords.length > 0 && setWordNum(0)
 
 
 	// ! RETURN
@@ -136,10 +156,10 @@ export default function Answer() {
 		<section className="answerSection">
 
 			{
-				curStatusWords.length > 0 && curStatusWord ?
+				curWords.length > 0 && wordToTranslate ?
 					<>
 						<div className="translated">
-							<div className="translated__word">{curStatusWords[wordNum].translated}</div>
+							<div className="translated__word">{word.translated}</div>
 
 							<div onClick={() => setWordNum(prev => prev + 1)}>
 								<Button text="next" />
@@ -181,7 +201,7 @@ export default function Answer() {
 						</div>
 
 						<div className="answer">
-							<Input type="text" name="answer" placeholder="answer" value={answer} setValue={setAnswer} />
+							<Input type="text" name="answer" placeholder="answer" value={answer} setValue={setAnswer} maxLength={word.toTranslate.length} />
 
 							<div onClick={checkAnswer}>
 								<Button text="check" />
