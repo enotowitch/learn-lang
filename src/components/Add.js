@@ -1,17 +1,19 @@
 import React, { useContext, useState } from "react"
 import { Context } from "../context"
 import Button from "./Button"
-import InputText from "./InputText"
+import Input from "./Input"
 import IconText from "./IconText"
 import Tags from "./Tags"
 import Tag from "./Tag"
 
 export default function Add() {
 
-	const { add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, tags } = useContext(Context)
+	const { add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, tags, usage, setUsage } = useContext(Context)
 
 	// ! showTags
 	const [showTags, setShowTags] = useState(true)
+	// ! showUsage
+	const [showUsage, setShowUsage] = useState(true)
 
 
 	// ! RETURN
@@ -19,8 +21,8 @@ export default function Add() {
 		<>
 			<section className="addSection">
 				<div>
-					<InputText name="add1" placeholder="new word" value={add1} setValue={setAdd1} />
-					{wordTranslated && <InputText name="add2" placeholder="translation" value={add2} setValue={setAdd2} />}
+					<Input type="text" name="add1" placeholder="new word" value={add1} setValue={setAdd1} />
+					{wordTranslated && <Input type="text" name="add2" placeholder="translation" value={add2} setValue={setAdd2} />}
 				</div>
 
 				{!wordTranslated && <div onClick={translate}><Button text="translate" /></div>}
@@ -43,6 +45,15 @@ export default function Add() {
 							<Tag mode="write" />
 						</div>
 					}
+
+					<div onClick={() => setShowUsage(prev => !prev)}>
+						<IconText src="arrow" text="Usage" rotate={showUsage} />
+					</div>
+
+					{showUsage &&
+						<Input type="textarea" className="usage" name="usage" placeholder="add usage" value={usage} setValue={setUsage} />
+					}
+
 				</>
 			}
 		</>

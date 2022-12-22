@@ -3,7 +3,7 @@ import { Context } from "./../context"
 import AnswerBlock from "./AnswerBlock"
 import Button from "./Button"
 import IconText from "./IconText"
-import InputText from "./InputText"
+import Input from "./Input"
 import Tags from "./Tags"
 
 export default function Answer() {
@@ -112,8 +112,15 @@ export default function Answer() {
 		}
 	}
 
-	// ! showTags
+	// ! showTags,	showUsage
 	const [showTags, setShowTags] = useState(false)
+	const [showUsage, setShowUsage] = useState(false)
+	// ? showTags,	showUsage
+
+	// ! tags, usage
+	const tags = curStatusWords[wordNum] && eval(curStatusWords[wordNum].synonym)
+	const usage = curStatusWords[wordNum] && curStatusWords[wordNum].usage
+	// ? tags, usage
 
 	// ! other
 	// drop answer input text if word changed, correct answer given
@@ -122,8 +129,6 @@ export default function Answer() {
 	}, [wordNum, lastCorrectAnswer])
 	// go to first word if no next word
 	!curStatusWord && curStatusWords.length > 0 && setWordNum(0)
-	// tags
-	const tags = curStatusWords[wordNum] && eval(curStatusWords[wordNum].synonym)
 
 
 	// ! RETURN
@@ -159,12 +164,24 @@ export default function Answer() {
 							</>
 						}
 
+						{usage &&
+							<>
+								<div onClick={() => setShowUsage(prev => !prev)}>
+									<IconText src="arrow" text="Usage" rotate={showUsage} />
+								</div>
+
+								{showUsage &&
+									<div className="usage usage_read">{usage}</div>
+								}
+							</>
+						}
+
 						<div className="answerBlocks">
 							{answerBlocks}
 						</div>
 
 						<div className="answer">
-							<InputText name="answer" placeholder="answer" value={answer} setValue={setAnswer} />
+							<Input type="text" name="answer" placeholder="answer" value={answer} setValue={setAnswer} />
 
 							<div onClick={checkAnswer}>
 								<Button text="check" />

@@ -29,18 +29,20 @@ export default function App() {
 		setCookie("lastId", lastId)
 	}, [lastId])
 	// ? wordTranslated,	words, lastId
-	// ! add1, add2, answer, answerStatus, lastCorrectAnswer
+	// ! add1, add2, answer, answerStatus, lastCorrectAnswer, usage
 	const [add1, setAdd1] = useState("")
 	const [add2, setAdd2] = useState("")
 	const [answer, setAnswer] = useState("")
 	const [answerStatus, setAnswerStatus] = useState("")
+
+	const [usage, setUsage] = useState("")
 
 	useEffect(() => {
 		setAnswer("")
 	}, [answerStatus])
 
 	const [lastCorrectAnswer, setLastCorrectAnswer] = useState("")
-	// ? add1, add2, answer, answerStatus, lastCorrectAnswer
+	// ? add1, add2, answer, answerStatus, lastCorrectAnswer, usage
 
 	// ! translate, tags, cookieTags
 
@@ -79,14 +81,16 @@ export default function App() {
 		// ! synonym
 		const synonym = []
 		document.querySelectorAll(".Tag_active").forEach(tag => synonym.push(tag.value))
+		// ! usage
+		const usage = document.querySelector(".usage").value
 
 		let exist
-		words.map(word => word.toTranslate.toLowerCase().trim() == add1.toLowerCase().trim() && (exist = true))
+		words.map(word => word.toTranslate.toLowerCase().trim() === add1.toLowerCase().trim() && (exist = true))
 
 		if (!exist) {
 			setLastId(prev => prev + 1)
-			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new", synonym: synonym }]))
-			localStorage.setItem(lastId + 1, JSON.stringify({ id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new", synonym: JSON.stringify(synonym) }))
+			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new", synonym: synonym, usage: usage }]))
+			localStorage.setItem(lastId + 1, JSON.stringify({ id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new", synonym: JSON.stringify(synonym), usage: usage }))
 			setAdd1("")
 			setAdd2("")
 			setWordTranslated(false)
@@ -110,7 +114,7 @@ export default function App() {
 
 	// ! RETURN
 	return (
-		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, statusBlockToggle, setStatusBlockToggle, tags }} >
+		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, statusBlockToggle, setStatusBlockToggle, tags, usage, setUsage }} >
 
 			<div className="StatusBlocks">
 				<StatusBlock status="new" num={calcNum("new") || 0} />

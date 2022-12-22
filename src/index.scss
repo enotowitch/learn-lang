@@ -7,6 +7,8 @@ $secondaryFont: Roboto;
 // color
 $darkColor: #000;
 $activeColor: #ACE1AF;
+// width
+$inputWidth: 150px;
 
 *{
 	box-sizing: border-box;
@@ -49,7 +51,7 @@ button {
 		margin: 2.5px;
 	}
 }
-.StatusBlocks, .addSection, .translated, .answerBlocks, .answer, .mistake, .noWords, .Tags, .IconText {
+.StatusBlocks, .addSection, .translated, .answerBlocks, .answer, .mistake, .noWords, .Tags, .IconText, .usage {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -101,17 +103,25 @@ button {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		margin-right: auto;
 	}
 }
 .IconText{
+	position: relative;
+	min-width: $inputWidth;
+	width: $inputWidth;
 	font-size: 1.1rem;
 	margin-bottom: 0;
 	span{
 		margin-left: 4px;
+		position: absolute;
+		left: 32px;
 	}
 }
 .Tags{
 	margin-bottom: 20px;
+	min-width: $inputWidth;
+	width: $inputWidth;
 }
 .Tag{
 	display: inline-block;
@@ -119,6 +129,7 @@ button {
 	border-radius: 4px;
 	margin: 4px;
 	padding: 4px;
+	width: $inputWidth;
 	&_active{
 		background: $activeColor;
 	}
@@ -126,6 +137,16 @@ button {
 		border: none;
 		font-weight: 700;
 		width: 100%;
+		text-align: center;
+	}
+}
+.usage {
+	min-width: $inputWidth;
+	width: $inputWidth;
+	&_read {
+		font-weight: 700;
+		margin: 4px auto;
+		padding: 4px;
 		text-align: center;
 	}
 }

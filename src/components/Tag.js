@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import InputText from "./InputText"
+import Input from "./Input"
 
 export default function Tag(props) {
 
@@ -13,7 +13,7 @@ export default function Tag(props) {
 		<>
 			{props.mode === "write" &&
 				<div onClick={toggleActive}>
-					<InputText className="Tag" placeholder="add synonym" value={tagState} setValue={setTagState} />
+					<Input type="text" className="Tag" placeholder="add synonym" value={tagState} setValue={setTagState} />
 				</div>
 			}
 
