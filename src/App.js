@@ -12,12 +12,16 @@ import data from "./data"
 import StatusBlock from "./components/StatusBlock";
 import Answer from "./components/Answer";
 import Add from "./components/Add";
+import Lang from "./components/Lang";
+import Button from "./components/Button";
 
 export default function App() {
 
 	// ! default cookies
 	!document.cookie.match(/lastId/) && setCookie("lastId", 0)
 	!document.cookie.match(/tags/) && setCookie("tags", "")
+	!document.cookie.match(/langFrom/) && setCookie("langFrom", "EN")
+	!document.cookie.match(/langTo/) && setCookie("langTo", "RU")
 	// ? default cookies
 
 	// ! wordTranslated,	words, lastId
@@ -33,9 +37,9 @@ export default function App() {
 	const [add1, setAdd1] = useState("")
 	const [add2, setAdd2] = useState("")
 	const [answer, setAnswer] = useState("")
-	const [answerStatus, setAnswerStatus] = useState("")
-
 	const [usage, setUsage] = useState("")
+
+	const [answerStatus, setAnswerStatus] = useState("")
 
 	useEffect(() => {
 		setAnswer("")
@@ -44,13 +48,25 @@ export default function App() {
 	const [lastCorrectAnswer, setLastCorrectAnswer] = useState("")
 	// ? add1, add2, answer, answerStatus, lastCorrectAnswer, usage
 
+	// ! langFrom, langTo
+	const [langFrom, setLangFrom] = useState(getCookie("langFrom"))
+	const [langTo, setLangTo] = useState(getCookie("langTo"))
+
+	useEffect(() => {
+		setCookie("langFrom", langFrom)
+	}, [langFrom])
+	useEffect(() => {
+		setCookie("langTo", langTo)
+	}, [langTo])
+	// ? langFrom, langTo
+
 	// ! translate, tags, cookieTags
 
 	const [tags, setTags] = useState([])
 
 	function translate() {
 		if (add1.trim()) {
-			fetch(`https://api.mymemory.translated.net/get?q=${add1}!&langpair=en|ru`)
+			fetch(`https://api.mymemory.translated.net/get?q=${add1}!&langpair=${langFrom}|${langTo}`)
 				.then((response) => response.json())
 				.then((responseText) => {
 					// ! cookieTags
@@ -89,8 +105,8 @@ export default function App() {
 
 		if (!exist) {
 			setLastId(prev => prev + 1)
-			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new", synonym: synonym, usage: usage }]))
-			localStorage.setItem(lastId + 1, JSON.stringify({ id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new", synonym: JSON.stringify(synonym), usage: usage }))
+			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new", synonym: synonym, usage: usage, langFrom, langTo }]))
+			localStorage.setItem(lastId + 1, JSON.stringify({ id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new", synonym: JSON.stringify(synonym), usage: usage, langFrom, langTo }))
 			setAdd1("")
 			setAdd2("")
 			setWordTranslated(false)
@@ -103,7 +119,7 @@ export default function App() {
 	// ? addFn
 
 	// ! StatusBlock nums
-	const calcNum = (status) => words.map(word => word.status === status).filter(t => t).length
+	const calcNum = (status) => words.map(word => word.status === status && word.langFrom === langFrom && word.langTo === langTo).filter(t => t).length
 
 	// ! statusBlockToggle
 	const [statusBlockToggle, setStatusBlockToggle] = useState(0)
@@ -112,10 +128,26 @@ export default function App() {
 	}, [answerStatus])
 	// ? statusBlockToggle
 
+	// ! drop
+	function drop() {
+		if (window.confirm("DELETE ALL WORDS?")) {
+			localStorage.clear()
+			document.cookie.split(";").forEach(function (c) { document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); });
+			window.location.reload()
+		}
+	}
+	// ? drop
+
 
 	// ! RETURN
 	return (
-		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, statusBlockToggle, setStatusBlockToggle, tags, usage, setUsage }} >
+		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, statusBlockToggle, setStatusBlockToggle, tags, usage, setUsage, langFrom, setLangFrom, langTo, setLangTo }} >
+
+			<Lang />
+
+			<div onClick={drop}>
+				<Button text="drop" className="drop danger ma" />
+			</div>
 
 			<div className="StatusBlocks">
 				<StatusBlock status="new" num={calcNum("new") || 0} />

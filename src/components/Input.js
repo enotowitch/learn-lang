@@ -26,6 +26,21 @@ export default function Input(props) {
 					}
 				/>
 			}
+			{props.type === "select" &&
+				<select
+					className={props.className}
+					name={props.name}
+					value={props.value}
+					onChange={(e) => props.setValue(e.target.value)
+					}
+				>
+					<option>EN</option>
+					<option>UK</option>
+					<option>DE</option>
+					<option>FR</option>
+					<option>RU</option>
+				</select>
+			}
 		</>
 	)
 }

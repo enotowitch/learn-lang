@@ -8,7 +8,7 @@ import Tags from "./Tags"
 
 export default function Answer() {
 
-	const { words, setWords, answerStatus, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer } = useContext(Context)
+	const { words, setWords, answerStatus, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, langFrom, langTo } = useContext(Context)
 
 	// ! wordNum
 	const [wordNum, setWordNum] = useState(0)
@@ -20,7 +20,7 @@ export default function Answer() {
 
 	// ! curWords, word, wordToTranslate, mistake 
 	let curWords = []
-	words.map(word => word.status === answerStatus && (curWords.push(word)))
+	words.map(word => word.status === answerStatus && word.langFrom === langFrom && word.langTo === langTo && (curWords.push(word)))
 
 	const word = curWords[wordNum]
 	const wordToTranslate = word && word.toTranslate

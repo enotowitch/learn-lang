@@ -8,6 +8,7 @@ $inputFontSize: 1.2rem;
 // color
 $darkColor: #000;
 $activeColor: #ACE1AF;
+$dangerColor: tomato;
 // width
 $inputWidth: 150px;
 
@@ -52,10 +53,15 @@ textarea{
 	text-indent: 4px;
 }
 // ? tags
-
-.ml{
-	margin-left: 15px;
+// ! danger
+.danger{
+	color: $dangerColor;
+	&:hover,&:active{
+		background: lighten($dangerColor, 30%);
+	}
 }
+// ? danger
+
 .StatusBlock {
 	display: inline-flex;
 	align-items: center;
@@ -181,3 +187,27 @@ textarea{
 		cursor: default;
 	}
 }
+.lang{
+	&__wrap{
+		display: inline-flex;
+	}
+}
+.drop{
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+// ! other
+.ml{
+	margin-left: 15px;
+}
+.ma{
+	margin: 15px;
+}
+.bn{
+	border: none;
+}
+.tr270{
+	transform: rotate(270deg);
+}
+// ? other
