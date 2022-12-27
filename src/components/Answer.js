@@ -114,33 +114,18 @@ export default function Answer() {
 	}
 	// ? deleteWord
 
-	// ! showTags,	showUsage
-	const [showTags, setShowTags] = useState(false)
+	// ! showSynonym,	showUsage
+	const [showSynonym, setShowSynonym] = useState(false)
 	const [showUsage, setShowUsage] = useState(false)
-	// ? showTags,	showUsage
+	// ? showSynonym,	showUsage
 
-	// ! tags, usage
-	const tags = word && eval(word.synonym)
+	// ! synonym, usage
+	const synonym = word && eval(word.synonym)
 
-	let usage = word && word.usage // they called their daughter Hannah
-	if (wordToTranslate) {
-		for (let i = 1; i <= wordToTranslate.length; i++) {
-			const regExp = new RegExp(wordToTranslate.slice(0, i + 1)) // match first 2 letters & more: /ca/, /cal/, /call/
-			if (usage.match(regExp)) {
-				const replaceNum = usage.match(regExp).index // 5 "they "called
-				const regExp2 = new RegExp(`.{${replaceNum}}`) // /.{5}/
-				const found = usage.replace(regExp2, "").match(/\S+/)[0] // called
-				// ! more complex; maybe use later
-				// const calcQuestionMarks = wordToTranslate.split("").map(letter => letter.replace(letter, "?")).join("") // call = ????
-				// const slice = found.slice(0, calcQuestionMarks.length) // call
-				// const Found = found.replace(slice, calcQuestionMarks) // called = ????ed
-				// usage = usage.replace(found, Found) // they ????ed their daughter Hannah
-				// ? more complex
-				usage = usage.replace(found, "?") // they ? their daughter Hannah
-			}
-		}
-	}
-	// ? tags, usage
+	let usage = word && eval(word.usage)
+
+	usage = word && usage.map(u => u.replace(new RegExp(word.toTranslate), "? "))
+	// ? synonym, usage
 
 	// ! other
 	// drop answer input text if word changed, correct answer given
@@ -170,28 +155,30 @@ export default function Answer() {
 							</div>
 						</div>
 
-						{tags.length > 0 &&
+						{synonym.length > 0 &&
 							<>
-								<div onClick={() => setShowTags(prev => !prev)}>
-									<IconText src="arrow" text="Synonym" rotate={showTags} />
+								<div onClick={() => setShowSynonym(prev => !prev)}>
+									<IconText src="arrow" text="Synonym" rotate={showSynonym} />
 								</div>
 
-								{showTags &&
+								{showSynonym &&
 									<div className="Tags">
-										<Tags tags={tags} mode="read" />
+										<Tags tags={synonym} mode="read" />
 									</div>
 								}
 							</>
 						}
 
-						{usage &&
+						{usage.length > 0 &&
 							<>
 								<div onClick={() => setShowUsage(prev => !prev)}>
 									<IconText src="arrow" text="Usage" rotate={showUsage} />
 								</div>
 
 								{showUsage &&
-									<div className="usage usage_read">{usage}</div>
+									<div className="Tags">
+										<Tags tags={usage} mode="read" />
+									</div>
 								}
 							</>
 						}

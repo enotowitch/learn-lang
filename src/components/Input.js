@@ -16,17 +16,17 @@ export default function Input(props) {
 				/>
 			}
 			{props.type === "textarea" &&
-				<textarea
+				<div
 					className={props.className} // ACTIVE: className={`${props.className} ${props.value.trim().length > 0 && `${props.className + "_active"}`}`}
-					type={props.type}
-					placeholder={props.placeholder}
-					name={props.name}
-					value={props.value}
 					onChange={(e) => props.setValue(e.target.value)
 					}
-				/>
+					contentEditable
+				>
+					{props.value}
+				</div>
 			}
-			{props.type === "select" &&
+			{
+				props.type === "select" &&
 				<select
 					className={props.className}
 					name={props.name}
@@ -34,11 +34,11 @@ export default function Input(props) {
 					onChange={(e) => props.setValue(e.target.value)
 					}
 				>
-					<option>EN</option>
-					<option>UK</option>
-					<option>DE</option>
-					<option>FR</option>
-					<option>RU</option>
+					<option>en</option>
+					<option>uk</option>
+					<option>de</option>
+					<option>fr</option>
+					<option>ru</option>
 				</select>
 			}
 		</>

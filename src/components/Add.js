@@ -5,20 +5,17 @@ import Input from "./Input"
 import IconText from "./IconText"
 import Tags from "./Tags"
 import Tag from "./Tag"
+import Icon from "./Icon"
 
 export default function Add() {
 
-	const { add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, tags, usage, setUsage } = useContext(Context)
+	const { add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, synonymArr, setSynonymArr, usageArr } = useContext(Context)
 
-	// ! showTags
-	const [showTags, setShowTags] = useState(true)
+	// ! showSynonym
+	const [showSynonym, setShowSynonym] = useState(true)
 	// ! showUsage
 	const [showUsage, setShowUsage] = useState(true)
-	// ! active usage
-	useEffect(() => {
-		const u = document.querySelector('.usage')
-		usage.trim().length > 0 ? u && u.classList.add('usage_active') : u && u.classList.remove('usage_active')
-	}, [usage, []])
+
 
 	// ! RETURN
 	return (
@@ -38,15 +35,18 @@ export default function Add() {
 			{
 				wordTranslated &&
 				<>
-					<div onClick={() => setShowTags(prev => !prev)}>
-						<IconText src="arrow" text="Synonym" rotate={showTags} />
+					<div onClick={() => setShowSynonym(prev => !prev)}>
+						<IconText src="arrow" text="Synonym" rotate={showSynonym} />
 					</div>
 
-					{showTags &&
-						<div className="Tags">
-							<Tags tags={tags} mode="write" />
+					{showSynonym &&
+						<div className="Tags synonymTags">
+							<Tags tags={synonymArr} mode="write" />
 							{/* empty tag => so user can add synonym */}
 							<Tag mode="write" />
+							<div onClick={() => setSynonymArr(prev => [...prev, ""])}>
+								<Icon src="add" />
+							</div>
 						</div>
 					}
 
@@ -55,7 +55,11 @@ export default function Add() {
 					</div>
 
 					{showUsage &&
-						<Input type="textarea" className="usage" name="usage" placeholder="add usage" value={usage} setValue={setUsage} />
+						<div className="Tags usageTags">
+							<Tags tags={usageArr} mode="write" />
+							{/* empty tag => so user can add usage */}
+							<Tag mode="write" />
+						</div>
 					}
 
 				</>

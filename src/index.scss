@@ -167,13 +167,18 @@ textarea{
 			background: transparent;
 		}
 	}
+	&__wrap{
+		display: flex;
+		align-items: center;
+	}
 }
 .usage {
-	min-width: $inputWidth * 2;
 	width: $inputWidth * 2;
-	height: $inputWidth;
+	min-height: 1rem;
+	word-break: break-all;
+	overflow: auto;
+	border: 2px solid $darkColor;
 	font-size: $inputFontSize;
-	resize: none;
 	&_active{
 		background: $activeColor;
 	}

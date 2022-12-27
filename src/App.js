@@ -19,9 +19,10 @@ export default function App() {
 
 	// ! default cookies
 	!document.cookie.match(/lastId/) && setCookie("lastId", 0)
-	!document.cookie.match(/tags/) && setCookie("tags", "")
-	!document.cookie.match(/langFrom/) && setCookie("langFrom", "EN")
-	!document.cookie.match(/langTo/) && setCookie("langTo", "RU")
+	!document.cookie.match(/synonym/) && setCookie("synonym", "")
+	!document.cookie.match(/usage/) && setCookie("usage", "")
+	!document.cookie.match(/langFrom/) && setCookie("langFrom", "en")
+	!document.cookie.match(/langTo/) && setCookie("langTo", "ru")
 	// ? default cookies
 
 	// ! wordTranslated,	words, lastId
@@ -60,28 +61,56 @@ export default function App() {
 	}, [langTo])
 	// ? langFrom, langTo
 
-	// ! translate, tags, cookieTags
+	// ! translate, synonymArr, usageArr, cookieSynonym, cookieUsage
 
-	const [tags, setTags] = useState([])
+	const [synonymArr, setSynonymArr] = useState([])
+	const [usageArr, setUsageArr] = useState([])
 
 	function translate() {
 		if (add1.trim()) {
-			fetch(`https://api.mymemory.translated.net/get?q=${add1}!&langpair=${langFrom}|${langTo}`)
-				.then((response) => response.json())
-				.then((responseText) => {
-					// ! cookieTags
-					const cookieTags = []
-					responseText.matches.map(tag => cookieTags.push(tag.translation))
-					setCookie("tags", JSON.stringify(cookieTags))
-					setTags(eval(getCookie("tags")))
-					// ? cookieTags
-
-					setAdd2(responseText.responseData.translatedText)
+			// ! fetch 1 synonym
+			fetch(`https://www.wordreference.com/enru/${add1}`)
+				.then((response) => {
+					return response.text();
+				})
+				.then((data) => {
+					// ! cookieSynonym
+					const cookieSynonym = []
+					if (data.match(/'ToWrd'.*<em/g)) {
+						data.match(/'ToWrd'.*<em/g).map(synonym => cookieSynonym.push(synonym.replace(/'ToWrd'\s>|\s\<em"|<em/g, "").trim()))
+						console.log("CASE 1")
+					} else if (data.match(/\s\S+<a class='footnote'/g)) {
+						data.match(/\s\S+<a class='footnote'/g).map(synonym => cookieSynonym.push(synonym.replace(/&#x301;|<a class='footnote'|^\s|\(|href.*<\/a>/g, "").trim()))
+						console.log("CASE 2")
+					} else if (data.match(/ruen\/.*? '|ruen\/.*?"/g)) {
+						console.log("CASE 3")
+						data.match(/ruen\/.*? '|ruen\/.*?"/g).map(synonym => cookieSynonym.push(synonym.replace(/&#x301;|ruen\/|"/g, "").trim()))
+					}
+					console.log(cookieSynonym)
+					setCookie("synonym", JSON.stringify(cookieSynonym))
+					setSynonymArr(eval(getCookie("synonym")))
+					// ? cookieSynonym
+					setAdd2(cookieSynonym[0])
 				});
 			setWordTranslated(true)
+			// ? fetch 1 synonym
+			// ! fetch 2 usage
+			fetch(`https://www.wordreference.com/englishcollocations/${add1}`)
+				.then((response) => {
+					return response.text();
+				})
+				.then((data) => {
+					// ! cookieUsage
+					const cookieUsage = []
+					data.match(/<ol>.*?<li>.*?<\/li>/g).map(usage => cookieUsage.push(usage.replace(/<ol>|<li>|<\/li>/g, "")))
+					setCookie("usage", JSON.stringify(cookieUsage))
+					setUsageArr(eval(getCookie("usage")))
+					// ? cookieUsage
+				});
+			// ? fetch 2 usage
 		}
 	}
-	// ? translate, tags, cookieTags
+	// ? translate, synonymArr, usageArr, cookieSynonym, cookieUsage
 
 	// ! addFn
 	function addFn() {
@@ -94,26 +123,27 @@ export default function App() {
 			return
 		}
 
-		// ! synonym
-		const synonym = []
-		document.querySelectorAll(".Tag_active").forEach(tag => tag.value.trim() && synonym.push(tag.value))
-		// ! usage
-		const usage = document.querySelector(".usage").value.trim()
+		const add_1 = add1.toLowerCase().trim()
+		const add_2 = add2.toLowerCase().trim()
+
+		let collectedSynonym = []
+		document.querySelectorAll('.synonymTags .Tag').forEach(t => t.innerText.trim() && collectedSynonym.push(t.innerText.trim()))
 
 		let exist
-		words.map(word => word.toTranslate.toLowerCase().trim() === add1.toLowerCase().trim() && (exist = true))
+		words.map(word => word.toTranslate.toLowerCase().trim() === add_1 && word.translated.toLowerCase().trim() === add_2 && (exist = true))
 
 		if (!exist) {
 			setLastId(prev => prev + 1)
-			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new", synonym: synonym, usage: usage, langFrom, langTo }]))
-			localStorage.setItem(lastId + 1, JSON.stringify({ id: lastId + 1, "toTranslate": add1, "translated": add2, status: "new", synonym: JSON.stringify(synonym), usage: usage, langFrom, langTo }))
+			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add_1, "translated": add_2, status: "new", synonym: collectedSynonym, usage: usageArr, langFrom, langTo }]))
+			localStorage.setItem(lastId + 1, JSON.stringify({ id: lastId + 1, "toTranslate": add_1, "translated": add_2, status: "new", synonym: JSON.stringify(collectedSynonym), usage: JSON.stringify(usageArr), langFrom, langTo }))
 			setAdd1("")
 			setAdd2("")
 			setWordTranslated(false)
-			setTags([])
+			setSynonymArr([])
+			setUsageArr([])
 			setUsage("")
 		} else {
-			alert("word already exists!");
+			alert(`word pair "${add1}" & "${add2}": already exists!`);
 		}
 	}
 	// ? addFn
@@ -141,7 +171,7 @@ export default function App() {
 
 	// ! RETURN
 	return (
-		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, statusBlockToggle, setStatusBlockToggle, tags, usage, setUsage, langFrom, setLangFrom, langTo, setLangTo }} >
+		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, statusBlockToggle, setStatusBlockToggle, synonymArr, setSynonymArr, usageArr, setUsageArr, usage, setUsage, langFrom, setLangFrom, langTo, setLangTo }} >
 
 			<Lang />
 
