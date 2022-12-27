@@ -127,15 +127,17 @@ export default function App() {
 		const add_2 = add2.toLowerCase().trim()
 
 		let collectedSynonym = []
-		document.querySelectorAll('.synonymTags .Tag').forEach(t => t.innerText.trim() && collectedSynonym.push(t.innerText.trim()))
+		document.querySelectorAll('.Synonym .Tag').forEach(t => t.innerText.trim() && collectedSynonym.push(t.innerText.trim()))
+		let collectedUsage = []
+		document.querySelectorAll('.Usage .Tag').forEach(t => t.innerText.trim() && collectedUsage.push(t.innerText.trim()))
 
 		let exist
 		words.map(word => word.toTranslate.toLowerCase().trim() === add_1 && word.translated.toLowerCase().trim() === add_2 && (exist = true))
 
 		if (!exist) {
 			setLastId(prev => prev + 1)
-			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add_1, "translated": add_2, status: "new", synonym: collectedSynonym, usage: usageArr, langFrom, langTo }]))
-			localStorage.setItem(lastId + 1, JSON.stringify({ id: lastId + 1, "toTranslate": add_1, "translated": add_2, status: "new", synonym: JSON.stringify(collectedSynonym), usage: JSON.stringify(usageArr), langFrom, langTo }))
+			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add_1, "translated": add_2, status: "new", synonym: collectedSynonym, usage: collectedUsage, langFrom, langTo }]))
+			localStorage.setItem(lastId + 1, JSON.stringify({ id: lastId + 1, "toTranslate": add_1, "translated": add_2, status: "new", synonym: JSON.stringify(collectedSynonym), usage: JSON.stringify(collectedUsage), langFrom, langTo }))
 			setAdd1("")
 			setAdd2("")
 			setWordTranslated(false)

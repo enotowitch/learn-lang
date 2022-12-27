@@ -25,15 +25,17 @@ export default function Tag(props) {
 	function deleteTag(e) {
 		const tagText = e.target.closest(".Tag__wrap").querySelector(".Tag").innerText
 		// synonym
-		if (e.target.closest(".Tags").className.includes("synonym")) {
+		if (e.target.closest(".Tags").className.includes("Synonym")) {
 			const deleted = synonymArr.filter(s => s !== tagText)
 			setSynonymArr(deleted)
 		}
 		// usage
-		if (e.target.closest(".Tags").className.includes("usage")) {
+		if (e.target.closest(".Tags").className.includes("Usage")) {
 			const deleted = usageArr.filter(s => s !== tagText)
 			setUsageArr(deleted)
 		}
+		// erase "custom" tag text
+		e.target.closest(".Tag__wrap").querySelector(".Tag").innerText = ""
 	}
 	// update tagState when delete tag
 	useEffect(() => {

@@ -1,15 +1,12 @@
-import React, { useContext, useEffect, useState } from "react"
+import React, { useContext, useState } from "react"
 import { Context } from "../context"
 import Button from "./Button"
 import Input from "./Input"
-import IconText from "./IconText"
-import Tags from "./Tags"
-import Tag from "./Tag"
-import Icon from "./Icon"
+import TagBlock from "./TagBlock"
 
 export default function Add() {
 
-	const { add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, synonymArr, setSynonymArr, usageArr } = useContext(Context)
+	const { add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, synonymArr, setSynonymArr, usageArr, setUsageArr } = useContext(Context)
 
 	// ! showSynonym
 	const [showSynonym, setShowSynonym] = useState(true)
@@ -35,33 +32,11 @@ export default function Add() {
 			{
 				wordTranslated &&
 				<>
-					<div onClick={() => setShowSynonym(prev => !prev)}>
-						<IconText src="arrow" text="Synonym" rotate={showSynonym} />
-					</div>
+					<TagBlock setShow={setShowSynonym} text="Synonym" show={showSynonym}
+						tags={synonymArr} setTags={setSynonymArr} />
 
-					{showSynonym &&
-						<div className="Tags synonymTags">
-							<Tags tags={synonymArr} mode="write" />
-							{/* empty tag => so user can add synonym */}
-							<Tag mode="write" />
-							<div onClick={() => setSynonymArr(prev => [...prev, ""])}>
-								<Icon src="add" />
-							</div>
-						</div>
-					}
-
-					<div onClick={() => setShowUsage(prev => !prev)}>
-						<IconText src="arrow" text="Usage" rotate={showUsage} />
-					</div>
-
-					{showUsage &&
-						<div className="Tags usageTags">
-							<Tags tags={usageArr} mode="write" />
-							{/* empty tag => so user can add usage */}
-							<Tag mode="write" />
-						</div>
-					}
-
+					<TagBlock setShow={setShowUsage} text="Usage" show={showUsage}
+						tags={usageArr} setTags={setUsageArr} />
 				</>
 			}
 		</>
