@@ -14,6 +14,7 @@ import Answer from "./components/Answer";
 import Add from "./components/Add";
 import Lang from "./components/Lang";
 import Button from "./components/Button";
+import Icon from "./components/Icon";
 
 export default function App() {
 
@@ -77,14 +78,15 @@ export default function App() {
 					// ! cookieSynonym
 					const cookieSynonym = []
 					if (data.match(/'ToWrd'.*<em/g)) {
-						data.match(/'ToWrd'.*<em/g).map(synonym => cookieSynonym.push(synonym.replace(/'ToWrd'\s>|\s\<em"|<em/g, "").trim()))
+						// todo 1 regexp
+						data.match(/'ToWrd'.*<em/g).map(synonym => cookieSynonym.push(synonym.replace(/'ToWrd'\s>|\s\<em"|<em|&|;|(<([^>]+)>)/g, "").trim()))
 						console.log("CASE 1")
 					} else if (data.match(/\s\S+<a class='footnote'/g)) {
-						data.match(/\s\S+<a class='footnote'/g).map(synonym => cookieSynonym.push(synonym.replace(/&#x301;|<a class='footnote'|^\s|\(|href.*<\/a>/g, "").trim()))
+						data.match(/\s\S+<a class='footnote'/g).map(synonym => cookieSynonym.push(synonym.replace(/&#x301;|<a class='footnote'|^\s|\(|href.*<\/a>|&|;|(<([^>]+)>)/g, "").trim()))
 						console.log("CASE 2")
 					} else if (data.match(/ruen\/.*? '|ruen\/.*?"/g)) {
 						console.log("CASE 3")
-						data.match(/ruen\/.*? '|ruen\/.*?"/g).map(synonym => cookieSynonym.push(synonym.replace(/&#x301;|ruen\/|"/g, "").trim()))
+						data.match(/ruen\/.*? '|ruen\/.*?"/g).map(synonym => cookieSynonym.push(synonym.replace(/&#x301;|ruen\/|"|&|;|(<([^>]+)>)/g, "").trim()))
 					}
 					console.log(cookieSynonym)
 					setCookie("synonym", JSON.stringify(cookieSynonym))
@@ -153,13 +155,6 @@ export default function App() {
 	// ! StatusBlock nums
 	const calcNum = (status) => words.map(word => word.status === status && word.langFrom === langFrom && word.langTo === langTo).filter(t => t).length
 
-	// ! statusBlockToggle
-	const [statusBlockToggle, setStatusBlockToggle] = useState(0)
-	useEffect(() => {
-		setStatusBlockToggle(0)
-	}, [answerStatus])
-	// ? statusBlockToggle
-
 	// ! drop
 	function drop() {
 		if (window.confirm("DELETE ALL WORDS?")) {
@@ -173,12 +168,17 @@ export default function App() {
 
 	// ! RETURN
 	return (
-		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, statusBlockToggle, setStatusBlockToggle, synonymArr, setSynonymArr, usageArr, setUsageArr, usage, setUsage, langFrom, setLangFrom, langTo, setLangTo }} >
+		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, synonymArr, setSynonymArr, usageArr, setUsageArr, usage, setUsage, langFrom, setLangFrom, langTo, setLangTo, setWordTranslated }} >
 
 			<Lang />
 
 			<div onClick={drop}>
 				<Button text="drop" className="drop danger ma" />
+			</div>
+
+			{/* back to "add new word" */}
+			<div className="w100" onClick={() => setAnswerStatus("")}>
+				<Icon src="add" classNameBg="m0a mb" />
 			</div>
 
 			<div className="StatusBlocks">

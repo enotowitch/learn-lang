@@ -12,7 +12,7 @@ export default function Icon(props) {
 	const styleImg = props.rotate ? { "transform": "rotate(180deg)" } : { "transform": "rotate(0deg)" }
 
 	return (
-		<div className={`Icon__bg ${props.className}`} style={styleBg}>
+		<div className={`Icon__bg ${props.className} ${props.classNameBg}`} style={styleBg}>
 			<img className={`Icon ${props.className}`} src={src} style={styleImg} />
 		</div>
 	)

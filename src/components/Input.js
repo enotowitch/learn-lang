@@ -13,6 +13,7 @@ export default function Input(props) {
 					value={props.value}
 					onChange={(e) => props.setValue(e.target.value)}
 					maxLength={props.maxLength}
+					autoFocus
 				/>
 			}
 			{props.type === "textarea" &&

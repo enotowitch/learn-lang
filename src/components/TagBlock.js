@@ -6,9 +6,7 @@ import Tags from "./Tags"
 export default function TagBlock(props) {
 	return (
 		<>
-			<div onClick={() => props.setShow(prev => !prev)}>
-				<IconText src="arrow" text={props.text} rotate={props.show} />
-			</div>
+			<IconText src="arrow" text={props.text} rotate={props.show} bullFn={props.setShow} />
 
 			{
 				props.show &&

@@ -12,26 +12,34 @@ $dangerColor: tomato;
 // width
 $inputWidth: 150px;
 
-*{
+// ! Reset, defaultFont, userSelect
+* {
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
 	font-family: $primaryFont;
+	user-select: none;
+}
+// ! user-select ON
+.Tag_read{
+	user-select: text;
+	cursor: text !important;
 }
 [type="text"], textarea {
 	font-family: $secondaryFont;
 }
-// ! cursor, hover
-button, .StatusBlock, .IconText, .Tag, .rules{
+// ? Reset, defaultFont, userSelect
+// ! cursor, hover, active
+button, .StatusBlock, .IconText, .Synonym .Tag, .circle, select, .Icon__bg{
 	cursor: pointer;
 	&:hover{
-		background: lighten($activeColor, 15%);
+		background: lighten($activeColor, 15%) !important;
 	}
 	&:active{
-		background: lighten($activeColor, 5%);
+		background: lighten($activeColor, 5%) !important;
 	}
 }
-// ? cursor, hover
+// ? cursor, hover, active
 
 
 
@@ -48,9 +56,11 @@ button {
 	border: none;
 	border-bottom: 1px solid $darkColor;
 	font-size: $inputFontSize;
-}
-textarea{
-	text-indent: 4px;
+	text-indent: 2px;
+	outline: none;
+	&:focus{
+		border-bottom: 2px solid $darkColor;
+	}
 }
 // ? tags
 // ! danger
@@ -66,7 +76,7 @@ textarea{
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	border: 1px solid $darkColor;
+	border: 2px solid $darkColor;
 	border-radius: 10px;
 	width: 45%;
 	min-width: 120px;
@@ -75,7 +85,7 @@ textarea{
 		margin: 2.5px;
 	}
 }
-.StatusBlocks, .addSection, .translated, .answerBlocks, .answer, .mistake, .noWords, .Tags, .IconText, .usage {
+.StatusBlocks, .addSection, .addSection__top, .translated, .answerBlocks, .answer, .mistake, .noWords, .Tags, .IconText, .usage, .buttons, .translated__word {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -85,13 +95,18 @@ textarea{
 	min-width: 290px;
 	margin: 0 auto 50px;
 }
+[name="add2"]{
+	margin-top: 5px;
+}
 .translated {
+	margin: 100px auto -25px;
 	&__word{
 		font-style: italic;
 		font-weight: 600;
 		font-size: 1.15rem;
 		padding-bottom: 4px;
 		text-align: center;
+		width: 90%;
 	}
 }
 .AnswerBlock {
@@ -109,7 +124,7 @@ textarea{
 .activeBlock {
 	background: $activeColor;
 }
-.rules {
+.circle {
 	border: 1px solid $darkColor;
 	border-radius: 50%;
 	width: 20px;
@@ -117,6 +132,14 @@ textarea{
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	&_num{
+		margin-right: 5px;
+		font-weight: 400;
+		padding-right: 2px;
+		font-size: 1rem;
+		cursor: default;
+		pointer-events: none;
+	}
 }
 .Icon{
 	width: 15px;
@@ -124,7 +147,7 @@ textarea{
 		width: 30px;
 		height: 30px;
 		border-radius: 50%;
-		border: 1px solid $darkColor;
+		border: 2px solid $darkColor;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -194,6 +217,8 @@ textarea{
 	}
 }
 .lang{
+	border: 1px solid $darkColor;
+	border-radius: 7px;
 	&__wrap{
 		display: inline-flex;
 	}
@@ -203,12 +228,49 @@ textarea{
 	right: 0;
 	top: 0;
 }
+.learned{
+	border: 2px solid $activeColor;
+	&:hover,&:active{
+		background: $activeColor !important;
+	}
+}
+.repeat{
+	border: 2px solid lighten(orange, 20%);
+	&:hover,&:active{
+		background: lighten(orange, 20%) !important;
+	}
+}
+.learn{
+	border: 2px solid lighten($dangerColor, 20%);
+	&:hover,&:active{
+		background: lighten($dangerColor, 20%) !important;
+	}
+}
+.activeBlock.learned{
+	background: $activeColor;
+}
+.activeBlock.repeat{
+	background: lighten(orange, 20%);
+}
+.activeBlock.learn{
+	background: lighten($dangerColor, 20%);
+}
 // ! other
+// margin all
+.ma{
+	margin: 15px;
+}
+.m0a{
+	margin: 0 auto;
+}
 .ml{
 	margin-left: 15px;
 }
-.ma{
-	margin: 15px;
+.mb{
+	margin-bottom: 15px;
+}
+.w100{
+	width: 100%;
 }
 .bn{
 	border: none;

@@ -23,7 +23,7 @@ export default function Answer() {
 	words.map(word => word.status === answerStatus && word.langFrom === langFrom && word.langTo === langTo && (curWords.push(word)))
 
 	const word = curWords[wordNum]
-	const wordToTranslate = word && word.toTranslate
+	const wordToTranslate = word && word.toTranslate.toLowerCase()
 
 	const [mistake, setMistake] = useState(0)
 	// word changed, new StatusBlock visited, correct answer => setMistake(0)
@@ -77,7 +77,7 @@ export default function Answer() {
 
 		// WRONG ANSWER
 		// ! put 1,2,3... letter to answerBlock & to answer input
-		if (wordToTranslate !== answer) {
+		if (wordToTranslate !== answer.toLowerCase()) {
 			setMistake(prev => prev + 1)
 			letterArr[mistake] = toTranslateArr[mistake]
 			setAnswer(letterArr.join(''))
@@ -91,12 +91,20 @@ export default function Answer() {
 		// ? rules logic
 
 		// CORRECT ANSWER
-		if (wordToTranslate === answer) {
+		if (wordToTranslate === answer.toLowerCase()) {
 			words.map(wordObj => {
 				wordObj.toTranslate === answer && (wordObj.status = calculatedStatus)
 				wordObj.toTranslate === answer && localStorage.setItem(wordObj.id, JSON.stringify(wordObj))
 			})
 			setLastCorrectAnswer(answer)
+			// ! color body
+			mistake === 0 && (document.querySelectorAll("body, input, select").forEach(el => el.style.background = "#ACE1AF")) // green = learned
+			mistake === 1 && (document.querySelectorAll("body, input, select").forEach(el => el.style.background = "#fff0c1")) // yellow = repeat
+			mistake > 1 && (document.querySelectorAll("body, input, select").forEach(el => el.style.background = "#ffcbcb")) // red = learn
+			setTimeout(() => {
+				document.querySelectorAll("body, input, select").forEach(el => el.style.background = "white")
+			}, 1500);
+			// ? color body
 		}
 		// ? calculatedStatus, setMistake
 	}
@@ -144,22 +152,29 @@ export default function Answer() {
 				curWords.length > 0 && wordToTranslate ?
 					<>
 						<div className="translated">
-							<div className="translated__word">{word.translated}</div>
+							<div className="translated__word">
+								<span className="circle circle_num">{wordNum + 1}</span>
+								<span>{word.translated}</span>
+							</div>
+						</div>
 
-							<div onClick={() => setWordNum(prev => prev + 1)}>
+						<div className="buttons">
+							<span onClick={() => setWordNum(prev => prev + 1)}>
 								<Button text="next" />
-							</div>
+							</span>
 
-							<div onClick={deleteWord}>
-								<Button text="delete" />
-							</div>
+							<span onClick={() => setWordNum(prev => prev - 1)}>
+								<Button text="prev" />
+							</span>
+
+							<span onClick={deleteWord}>
+								<Button text="delete" className="danger" />
+							</span>
 						</div>
 
 						{synonym.length > 0 &&
 							<>
-								<div onClick={() => setShowSynonym(prev => !prev)}>
-									<IconText src="arrow" text="Synonym" rotate={showSynonym} />
-								</div>
+								<IconText src="arrow" text="Synonym" rotate={showSynonym} bullFn={setShowSynonym} />
 
 								{showSynonym &&
 									<div className="Tags">
@@ -171,9 +186,7 @@ export default function Answer() {
 
 						{usage.length > 0 &&
 							<>
-								<div onClick={() => setShowUsage(prev => !prev)}>
-									<IconText src="arrow" text="Usage" rotate={showUsage} />
-								</div>
+								<IconText src="arrow" text="Usage" rotate={showUsage} bullFn={setShowUsage} />
 
 								{showUsage &&
 									<div className="Tags">
@@ -197,7 +210,7 @@ export default function Answer() {
 						</div>
 
 						<div className="mistake">Mistakes: {mistake}
-							<div className="rules ml" onClick={() => alert(`0 mistakes: Learned\n1 mistake: To Repeat\n2 & more mistakes: To Learn`)}>?</div>
+							<div className="circle ml" onClick={() => alert(`0 mistakes: Learned\n1 mistake: To Repeat\n2 & more mistakes: To Learn`)}>?</div>
 						</div>
 					</>
 					:

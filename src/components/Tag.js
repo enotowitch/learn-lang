@@ -10,15 +10,17 @@ export default function Tag(props) {
 
 	// ! toggleActive
 	function toggleActive(e) {
-		// style tag
-		document.querySelectorAll(".Tag").forEach((t) => t.classList.remove("Tag_active"))
-		e.target.classList.add("Tag_active")
-		// set translation(add2) = a tag you clicked
-		setAdd2(e.target.innerText)
-		e.target.addEventListener("keyup", (e) => {
-			// set translation(add2) = what you typed in tag
+		if (e.target.closest(".Tags").className.includes("Synonym")) {
+			// style tag
+			document.querySelectorAll(".Tag").forEach((t) => t.classList.remove("Tag_active"))
+			e.target.classList.add("Tag_active")
+			// set translation(add2) = a tag you clicked
 			setAdd2(e.target.innerText)
-		})
+			e.target.addEventListener("keyup", (e) => {
+				// set translation(add2) = what you typed in tag
+				setAdd2(e.target.innerText)
+			})
+		}
 	}
 	// ? toggleActive
 	// ! deleteTag
