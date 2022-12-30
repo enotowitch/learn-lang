@@ -2,10 +2,16 @@ import React from "react"
 import Icon from "./Icon"
 
 export default function IconText(props) {
+
+	function IconTextFn(e) {
+		props.bullFn(prev => !prev)
+		e.target.closest(".IconText").classList.toggle("activeBlock")
+	}
+
 	return (
-		<div className="IconText" onClick={() => props.bullFn(prev => !prev)}>
-			<Icon src={props.src} rotate={props.rotate} />
+		<button className="IconText" onClick={IconTextFn}>
+			<Icon src={props.src} rotate={props.rotate} classNameBg={props.classNameBg} />
 			<span>{props.text}</span>
-		</div>
+		</button>
 	)
 }

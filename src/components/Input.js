@@ -14,17 +14,19 @@ export default function Input(props) {
 					onChange={(e) => props.setValue(e.target.value)}
 					maxLength={props.maxLength}
 					autoFocus
+					onFocus={(e) => e.target.classList.add("activeBlock")}
+					onBlur={(e) => e.target.classList.remove("activeBlock")}
 				/>
 			}
 			{props.type === "textarea" &&
-				<div
+				<button
 					className={props.className} // ACTIVE: className={`${props.className} ${props.value.trim().length > 0 && `${props.className + "_active"}`}`}
 					onChange={(e) => props.setValue(e.target.value)
 					}
 					contentEditable
 				>
 					{props.value}
-				</div>
+				</button>
 			}
 			{
 				props.type === "select" &&

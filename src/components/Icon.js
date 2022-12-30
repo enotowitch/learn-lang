@@ -8,12 +8,11 @@ export default function Icon(props) {
 		console.log("SRC NOT FOUND!")
 	}
 
-	const styleBg = props.rotate ? { "background": "#ACE1AF" } : { "background": "transparent" }
 	const styleImg = props.rotate ? { "transform": "rotate(180deg)" } : { "transform": "rotate(0deg)" }
 
 	return (
-		<div className={`Icon__bg ${props.className} ${props.classNameBg}`} style={styleBg}>
+		<button className={`Icon__bg ${props.className} ${props.classNameBg}`}>
 			<img className={`Icon ${props.className}`} src={src} style={styleImg} />
-		</div>
+		</button>
 	)
 }

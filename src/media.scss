@@ -2,12 +2,4 @@
 	.StatusBlocks, .addSection, .translated, .answerBlocks, .answer, .mistake, .noWords {
 		width: 100%;
 	}
-	[type="text"]{
-		width: 150px;
-	}
-}
-@media (min-width: 768px) {
-	.addSection__top {
-		width: 360px;
-	}
 }

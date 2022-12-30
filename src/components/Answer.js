@@ -86,8 +86,8 @@ export default function Answer() {
 
 		// ! rules logic
 		mistake === 0 && (calculatedStatus = "learned")
-		mistake === 1 && (calculatedStatus = "to repeat")
-		mistake > 1 && (calculatedStatus = "to learn")
+		mistake === 1 && (calculatedStatus = "repeat")
+		mistake > 1 && (calculatedStatus = "learn")
 		// ? rules logic
 
 		// CORRECT ANSWER
@@ -164,17 +164,17 @@ export default function Answer() {
 							</span>
 
 							<span onClick={() => setWordNum(prev => prev - 1)}>
-								<Button text="prev" />
+								<Button text="prev" className="ma" />
 							</span>
 
 							<span onClick={deleteWord}>
-								<Button text="delete" className="danger" />
+								<Button text="delete" className="danger ma" />
 							</span>
 						</div>
 
 						{synonym.length > 0 &&
 							<>
-								<IconText src="arrow" text="Synonym" rotate={showSynonym} bullFn={setShowSynonym} />
+								<IconText src="arrow" text="Synonym" rotate={showSynonym} bullFn={setShowSynonym} classNameBg="sui bshn" />
 
 								{showSynonym &&
 									<div className="Tags">
@@ -186,7 +186,7 @@ export default function Answer() {
 
 						{usage.length > 0 &&
 							<>
-								<IconText src="arrow" text="Usage" rotate={showUsage} bullFn={setShowUsage} />
+								<IconText src="arrow" text="Usage" rotate={showUsage} bullFn={setShowUsage} classNameBg="sui bshn" />
 
 								{showUsage &&
 									<div className="Tags">
@@ -204,13 +204,13 @@ export default function Answer() {
 							<Input type="text" name="answer" placeholder="answer" value={answer} setValue={setAnswer} maxLength={word.toTranslate.length} />
 
 							<div onClick={checkAnswer}>
-								<Button text="check" />
+								<Button text="check" className="ma" />
 							</div>
 
 						</div>
 
 						<div className="mistake">Mistakes: {mistake}
-							<div className="circle ml" onClick={() => alert(`0 mistakes: Learned\n1 mistake: To Repeat\n2 & more mistakes: To Learn`)}>?</div>
+							<div className="circle ml" onClick={() => alert(`0 mistakes: Learned\n1 mistake: Repeat\n2 & more mistakes: Learn`)}>?</div>
 						</div>
 					</>
 					:

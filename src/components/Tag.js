@@ -12,8 +12,8 @@ export default function Tag(props) {
 	function toggleActive(e) {
 		if (e.target.closest(".Tags").className.includes("Synonym")) {
 			// style tag
-			document.querySelectorAll(".Tag").forEach((t) => t.classList.remove("Tag_active"))
-			e.target.classList.add("Tag_active")
+			document.querySelectorAll(".Tag").forEach((t) => t.classList.remove("activeBlock"))
+			e.target.classList.add("activeBlock")
 			// set translation(add2) = a tag you clicked
 			setAdd2(e.target.innerText)
 			e.target.addEventListener("keyup", (e) => {
@@ -58,7 +58,7 @@ export default function Tag(props) {
 				</div>
 			}
 
-			{props.mode === "read" && <div className="Tag Tag_read">{props.text}</div>}
+			{props.mode === "read" && <div className="Tag Tag_read bshn">{props.text}</div>}
 		</>
 	)
 }

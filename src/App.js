@@ -184,8 +184,8 @@ export default function App() {
 			<div className="StatusBlocks">
 				<StatusBlock status="new" num={calcNum("new") || 0} />
 				<StatusBlock status="learned" num={calcNum("learned") || 0} />
-				<StatusBlock status="to repeat" num={calcNum("to repeat") || 0} />
-				<StatusBlock status="to learn" num={calcNum("to learn") || 0} />
+				<StatusBlock status="repeat" num={calcNum("repeat") || 0} />
+				<StatusBlock status="learn" num={calcNum("learn") || 0} />
 			</div>
 			{
 				!answerStatus ?

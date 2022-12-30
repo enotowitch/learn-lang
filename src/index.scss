@@ -6,11 +6,17 @@ $primaryFont: Montserrat;
 $secondaryFont: Roboto;
 $inputFontSize: 1.2rem;
 // color
+$mainColor: #fafafa;
 $darkColor: #000;
 $activeColor: #ACE1AF;
 $dangerColor: tomato;
 // width
 $inputWidth: 150px;
+// boxShadow
+$boxShadowActive: inset -2px -2px 6px rgba(255, 255, 255, .7),
+inset -2px -2px 4px rgba(255, 255, 255, .5),
+inset 2px 2px 2px rgba(255, 255, 255, .075),
+inset 2px 2px 4px rgba(0, 0, 0, .15);
 
 // ! Reset, defaultFont, userSelect
 * {
@@ -25,42 +31,61 @@ $inputWidth: 150px;
 	user-select: text;
 	cursor: text !important;
 }
-[type="text"], textarea {
+[type="text"], textarea, .Tag {
 	font-family: $secondaryFont;
 }
 // ? Reset, defaultFont, userSelect
-// ! cursor, hover, active
+// ! cursor
 button, .StatusBlock, .IconText, .Synonym .Tag, .circle, select, .Icon__bg{
 	cursor: pointer;
-	&:hover{
-		background: lighten($activeColor, 15%) !important;
-	}
-	&:active{
-		background: lighten($activeColor, 5%) !important;
-	}
 }
-// ? cursor, hover, active
+// ? cursor
 
 
 
 // ! tags
-button {
-	border-radius: 20px;
-	padding: 2px 6px;
-	border: 2px solid;
-	background: transparent;
-	font-size: 1rem;
+body, input, select {
+	background: $mainColor;
+}
+button, .AnswerBlock, .lang, [type="text"], .Icon__bg, .Tag {
+  padding: 0.5em 2em;
+  background: $mainColor;
+  border: none;
+  border-radius: .5rem;
+  color: #444;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .2rem;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+  transition: .2s ease-in-out;
+  box-shadow: -6px -6px 14px rgba(255, 255, 255, .7),
+              -6px -6px 10px rgba(255, 255, 255, .5),
+              6px 6px 8px rgba(255, 255, 255, .075),
+              6px 6px 10px rgba(0, 0, 0, .15);
+}
+button:hover {
+  box-shadow: -2px -2px 6px rgba(255, 255, 255, .6),
+              -2px -2px 4px rgba(255, 255, 255, .4),
+              2px 2px 2px rgba(255, 255, 255, .05),
+              2px 2px 4px rgba(0, 0, 0, .1);
+}
+button:active {
+  box-shadow: $boxShadowActive;
 }
 [type="text"] {
 	display: block;
+	width: 250px;
 	border: none;
-	border-bottom: 1px solid $darkColor;
+	padding: 0;
+	text-align: left !important;
 	font-size: $inputFontSize;
-	text-indent: 2px;
+	text-indent: 8px;
 	outline: none;
-	&:focus{
-		border-bottom: 2px solid $darkColor;
-	}
+	height: 40px;
+	box-shadow: inset 2px 2px 5px #babecc,
+	inset -5px -5px 10px #ffffff73;
 }
 // ? tags
 // ! danger
@@ -76,24 +101,29 @@ button {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	border: 2px solid $darkColor;
+	height: 60px;
+	background: $mainColor;
 	border-radius: 10px;
 	width: 45%;
 	min-width: 120px;
 	&_main{
 		padding: 10px;
-		margin: 2.5px;
+		margin: 5px;
 	}
-}
+} 
 .StatusBlocks, .addSection, .addSection__top, .translated, .answerBlocks, .answer, .mistake, .noWords, .Tags, .IconText, .usage, .buttons, .translated__word {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: center;
 	width: 50%;
-	max-width: 600px;
+	max-width: 700px;
 	min-width: 290px;
 	margin: 0 auto 50px;
+}
+.addSection__top{
+	width: auto;
+	flex-direction: column;
 }
 [name="add2"]{
 	margin-top: 5px;
@@ -113,16 +143,19 @@ button {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 40px;
-	height: 40px;
-	border: 1px solid $darkColor;
+	width: 80px;
+	height: 80px;
+	padding: 0;
 }
 .answerBlocks {
 	width: 100%;
 	margin-top: 50px;
 }
 .activeBlock {
-	background: $activeColor;
+	box-shadow: $boxShadowActive;
+	&:hover{
+		box-shadow: $boxShadowActive;
+	}
 }
 .circle {
 	border: 1px solid $darkColor;
@@ -132,10 +165,11 @@ button {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	padding: 15px;
 	&_num{
+		padding-right: 17px;
 		margin-right: 5px;
 		font-weight: 400;
-		padding-right: 2px;
 		font-size: 1rem;
 		cursor: default;
 		pointer-events: none;
@@ -146,13 +180,17 @@ button {
 	&__bg{
 		width: 30px;
 		height: 30px;
-		border-radius: 50%;
-		border: 2px solid $darkColor;
+		padding: 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		margin-right: auto;
 	}
+}
+// synonym usage icon
+.sui{
+	position: absolute;
+	left: 4px;
 }
 .IconText{
 	position: relative;
@@ -160,6 +198,7 @@ button {
 	width: $inputWidth;
 	font-size: 1.1rem;
 	margin-bottom: 15px;
+	padding: 30px;
 	span{
 		margin-left: 4px;
 		position: absolute;
@@ -173,10 +212,9 @@ button {
 }
 .Tag{
 	display: inline-block;
-	border: 1px solid $darkColor;
 	border-radius: 4px;
 	margin: 4px;
-	padding: 4px;
+	padding: 8px;
 	width: $inputWidth;
 	&_active{
 		background: $activeColor;
@@ -217,8 +255,8 @@ button {
 	}
 }
 .lang{
-	border: 1px solid $darkColor;
 	border-radius: 7px;
+	padding: 0;
 	&__wrap{
 		display: inline-flex;
 	}
@@ -229,31 +267,13 @@ button {
 	top: 0;
 }
 .learned{
-	border: 2px solid $activeColor;
-	&:hover,&:active{
-		background: $activeColor !important;
-	}
+	color: $activeColor;
 }
 .repeat{
-	border: 2px solid lighten(orange, 20%);
-	&:hover,&:active{
-		background: lighten(orange, 20%) !important;
-	}
+	color: lighten(orange, 20%);
 }
 .learn{
-	border: 2px solid lighten($dangerColor, 20%);
-	&:hover,&:active{
-		background: lighten($dangerColor, 20%) !important;
-	}
-}
-.activeBlock.learned{
-	background: $activeColor;
-}
-.activeBlock.repeat{
-	background: lighten(orange, 20%);
-}
-.activeBlock.learn{
-	background: lighten($dangerColor, 20%);
+	color: lighten($dangerColor, 20%);
 }
 // ! other
 // margin all
@@ -269,11 +289,20 @@ button {
 .mb{
 	margin-bottom: 15px;
 }
+.mr{
+	margin-right: 15px;
+}
 .w100{
 	width: 100%;
 }
 .bn{
 	border: none;
+}
+.dn{
+	display: none;
+}
+.bshn{
+	box-shadow: none;
 }
 .tr270{
 	transform: rotate(270deg);

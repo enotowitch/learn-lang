@@ -6,7 +6,7 @@ import Tags from "./Tags"
 export default function TagBlock(props) {
 	return (
 		<>
-			<IconText src="arrow" text={props.text} rotate={props.show} bullFn={props.setShow} />
+			<IconText src="arrow" text={props.text} rotate={props.show} bullFn={props.setShow} classNameBg="sui bshn" />
 
 			{
 				props.show &&
