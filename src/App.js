@@ -24,6 +24,7 @@ export default function App() {
 	!document.cookie.match(/usage/) && setCookie("usage", "")
 	!document.cookie.match(/langFrom/) && setCookie("langFrom", "en")
 	!document.cookie.match(/langTo/) && setCookie("langTo", "ru")
+	!document.cookie.match(/random/) && setCookie("random", "false")
 	// ? default cookies
 
 	// ! wordTranslated,	words, lastId
@@ -61,6 +62,13 @@ export default function App() {
 		setCookie("langTo", langTo)
 	}, [langTo])
 	// ? langFrom, langTo
+	// ! random
+	const [random, setRandom] = useState(eval(getCookie("random")))
+
+	useEffect(() => {
+		setCookie("random", random)
+	}, [random])
+	// ? random
 
 	// ! translate, synonymArr, usageArr, cookieSynonym, cookieUsage
 
@@ -168,7 +176,7 @@ export default function App() {
 
 	// ! RETURN
 	return (
-		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, synonymArr, setSynonymArr, usageArr, setUsageArr, usage, setUsage, langFrom, setLangFrom, langTo, setLangTo, setWordTranslated }} >
+		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, synonymArr, setSynonymArr, usageArr, setUsageArr, usage, setUsage, langFrom, setLangFrom, langTo, setLangTo, setWordTranslated, random, setRandom }} >
 
 			<Lang />
 

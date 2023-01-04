@@ -13,7 +13,7 @@ export default function Input(props) {
 					value={props.value}
 					onChange={(e) => props.setValue(e.target.value)}
 					maxLength={props.maxLength}
-					autoFocus
+					autoFocus={props.name !== "answer"}
 					onFocus={(e) => e.target.classList.add("activeBlock")}
 					onBlur={(e) => e.target.classList.remove("activeBlock")}
 				/>

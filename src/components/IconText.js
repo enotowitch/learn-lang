@@ -9,7 +9,7 @@ export default function IconText(props) {
 	}
 
 	return (
-		<button className="IconText" onClick={IconTextFn}>
+		<button className={`IconText ${props.className}`} onClick={IconTextFn}>
 			<Icon src={props.src} rotate={props.rotate} classNameBg={props.classNameBg} />
 			<span>{props.text}</span>
 		</button>

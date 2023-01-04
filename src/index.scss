@@ -6,7 +6,7 @@ $primaryFont: Montserrat;
 $secondaryFont: Roboto;
 $inputFontSize: 1.2rem;
 // color
-$mainColor: #fafafa;
+$mainColor: #efefef;
 $darkColor: #000;
 $activeColor: #ACE1AF;
 $dangerColor: tomato;
@@ -98,6 +98,7 @@ button:active {
 // ? danger
 
 .StatusBlock {
+	color: #7b737e;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -131,6 +132,7 @@ button:active {
 .translated {
 	margin: 100px auto -25px;
 	&__word{
+		margin-top: 30px;
 		font-style: italic;
 		font-weight: 600;
 		font-size: 1.15rem;
@@ -153,6 +155,7 @@ button:active {
 }
 .activeBlock {
 	box-shadow: $boxShadowActive;
+	filter: saturate(500%);
 	&:hover{
 		box-shadow: $boxShadowActive;
 	}
@@ -292,6 +295,9 @@ button:active {
 .mr{
 	margin-right: 15px;
 }
+.p0{
+	padding: 0;
+}
 .w100{
 	width: 100%;
 }
@@ -303,8 +309,5 @@ button:active {
 }
 .bshn{
 	box-shadow: none;
-}
-.tr270{
-	transform: rotate(270deg);
 }
 // ? other

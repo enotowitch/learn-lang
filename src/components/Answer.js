@@ -8,19 +8,21 @@ import Tags from "./Tags"
 
 export default function Answer() {
 
-	const { words, setWords, answerStatus, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, langFrom, langTo } = useContext(Context)
+	const { words, setWords, answerStatus, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, langFrom, langTo, random, setRandom } = useContext(Context)
+
+	// ! curWords, word, wordToTranslate, mistake, wordNum, randomNum 
+	let curWords = []
+	words.map(word => word.status === answerStatus && word.langFrom === langFrom && word.langTo === langTo && (curWords.push(word)))
 
 	// ! wordNum
 	const [wordNum, setWordNum] = useState(0)
-	// new StatusBlock visited => setWordNum(0)
+
+	const randomNum = random ? Math.floor(Math.random() * curWords.length) : 0
 	useEffect(() => {
-		setWordNum(0)
+		// new StatusBlock visited (answerStatus changed) => "set word to random word or to first word"
+		random ? setWordNum(randomNum) : setWordNum(0)
 	}, [answerStatus])
 	// ? wordNum
-
-	// ! curWords, word, wordToTranslate, mistake 
-	let curWords = []
-	words.map(word => word.status === answerStatus && word.langFrom === langFrom && word.langTo === langTo && (curWords.push(word)))
 
 	const word = curWords[wordNum]
 	const wordToTranslate = word && word.toTranslate.toLowerCase()
@@ -30,7 +32,7 @@ export default function Answer() {
 	useEffect(() => {
 		setMistake(0)
 	}, [wordNum, answerStatus, lastCorrectAnswer])
-	// ? curWords, word, wordToTranslate, mistake 
+	// ? curWords, word, wordToTranslate, mistake, wordNum, randomNum 
 
 	// ! answerBlocks length & put '?' to answerBlock 
 	let calcQuestionMarks = []
@@ -102,7 +104,7 @@ export default function Answer() {
 			mistake === 1 && (document.querySelectorAll("body, input, select").forEach(el => el.style.background = "#fff0c1")) // yellow = repeat
 			mistake > 1 && (document.querySelectorAll("body, input, select").forEach(el => el.style.background = "#ffcbcb")) // red = learn
 			setTimeout(() => {
-				document.querySelectorAll("body, input, select").forEach(el => el.style.background = "white")
+				document.querySelectorAll("body, input, select").forEach(el => el.style.background = "#efefef") // white
 			}, 1500);
 			// ? color body
 		}
@@ -140,8 +142,8 @@ export default function Answer() {
 	useEffect(() => {
 		setAnswer("")
 	}, [wordNum, lastCorrectAnswer])
-	// go to first word if no next word
-	!wordToTranslate && curWords.length > 0 && setWordNum(0)
+	// go to random word if no next word
+	!wordToTranslate && curWords.length > 0 && setWordNum(randomNum)
 
 
 	// ! RETURN
@@ -152,6 +154,7 @@ export default function Answer() {
 				curWords.length > 0 && wordToTranslate ?
 					<>
 						<div className="translated">
+							<IconText src={random ? "on" : "off"} text="Random" className="p0" classNameBg="bshn" bullFn={setRandom} />
 							<div className="translated__word">
 								<span className="circle circle_num">{wordNum + 1}</span>
 								<span>{word.translated}</span>
@@ -159,7 +162,7 @@ export default function Answer() {
 						</div>
 
 						<div className="buttons">
-							<span onClick={() => setWordNum(prev => prev + 1)}>
+							<span onClick={() => setWordNum(prev => prev + randomNum + 1)}>
 								<Button text="next" />
 							</span>
 
