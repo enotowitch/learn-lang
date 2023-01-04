@@ -19,14 +19,14 @@ export default function Input(props) {
 				/>
 			}
 			{props.type === "textarea" &&
-				<button
+				<div
 					className={props.className} // ACTIVE: className={`${props.className} ${props.value.trim().length > 0 && `${props.className + "_active"}`}`}
 					onChange={(e) => props.setValue(e.target.value)
 					}
 					contentEditable
 				>
 					{props.value}
-				</button>
+				</div>
 			}
 			{
 				props.type === "select" &&

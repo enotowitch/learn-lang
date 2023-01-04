@@ -130,15 +130,23 @@ button:active {
 	margin-top: 5px;
 }
 .translated {
-	margin: 100px auto -25px;
+	margin: 0px auto 25px;
+	position: sticky;
+	z-index: 2;
+	top: 0;
+	background: $mainColor;
 	&__word{
 		margin-top: 30px;
+		margin-bottom: 15px;
 		font-style: italic;
 		font-weight: 600;
 		font-size: 1.15rem;
 		padding-bottom: 4px;
 		text-align: center;
 		width: 90%;
+	}
+	.buttons{
+		margin: 0px 0 15px;
 	}
 }
 .AnswerBlock {
@@ -277,6 +285,18 @@ button:active {
 }
 .learn{
 	color: lighten($dangerColor, 20%);
+}
+.round{
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+}
+.random{
+	padding: 10px;
+	img {
+		position: absolute;
+		left: 12px;
+	}
 }
 // ! other
 // margin all

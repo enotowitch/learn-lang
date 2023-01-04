@@ -173,6 +173,21 @@ export default function App() {
 	}
 	// ? drop
 
+	// ! style translated onscroll (sticky translated)
+	useEffect(() => {
+		window.onscroll = () => {
+			const translated = document.querySelector(".translated")
+			if (window.scrollY >= translated.offsetTop) {
+				translated.style.border = "10px solid #e8e8e8"
+				translated.style.borderBottomLeftRadius = "10px"
+				translated.style.borderBottomRightRadius = "10px"
+			} else {
+				translated.style.border = "none"
+			}
+		}
+	}, [])
+	// ? style translated onscroll (sticky translated)
+
 
 	// ! RETURN
 	return (

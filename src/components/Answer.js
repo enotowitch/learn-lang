@@ -2,13 +2,16 @@ import React, { useContext, useState, useEffect } from "react"
 import { Context } from "./../context"
 import AnswerBlock from "./AnswerBlock"
 import Button from "./Button"
+import Icon from "./Icon"
 import IconText from "./IconText"
 import Input from "./Input"
 import Tags from "./Tags"
 
 export default function Answer() {
 
-	const { words, setWords, answerStatus, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, langFrom, langTo, random, setRandom } = useContext(Context)
+	let { words, setWords, answerStatus, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, langFrom, langTo, random, setRandom } = useContext(Context)
+
+	answer = answer.toLowerCase()
 
 	// ! curWords, word, wordToTranslate, mistake, wordNum, randomNum 
 	let curWords = []
@@ -79,7 +82,7 @@ export default function Answer() {
 
 		// WRONG ANSWER
 		// ! put 1,2,3... letter to answerBlock & to answer input
-		if (wordToTranslate !== answer.toLowerCase()) {
+		if (wordToTranslate !== answer) {
 			setMistake(prev => prev + 1)
 			letterArr[mistake] = toTranslateArr[mistake]
 			setAnswer(letterArr.join(''))
@@ -93,7 +96,7 @@ export default function Answer() {
 		// ? rules logic
 
 		// CORRECT ANSWER
-		if (wordToTranslate === answer.toLowerCase()) {
+		if (wordToTranslate === answer) {
 			words.map(wordObj => {
 				wordObj.toTranslate === answer && (wordObj.status = calculatedStatus)
 				wordObj.toTranslate === answer && localStorage.setItem(wordObj.id, JSON.stringify(wordObj))
@@ -153,26 +156,28 @@ export default function Answer() {
 			{
 				curWords.length > 0 && wordToTranslate ?
 					<>
+
+						<IconText src={random ? "on" : "off"} text="Random" className="random" classNameBg="bshn" bullFn={setRandom} />
+
 						<div className="translated">
-							<IconText src={random ? "on" : "off"} text="Random" className="p0" classNameBg="bshn" bullFn={setRandom} />
 							<div className="translated__word">
 								<span className="circle circle_num">{wordNum + 1}</span>
 								<span>{word.translated}</span>
 							</div>
-						</div>
+							<div className="buttons">
 
-						<div className="buttons">
-							<span onClick={() => setWordNum(prev => prev + randomNum + 1)}>
-								<Button text="next" />
-							</span>
+								<span onClick={() => setWordNum(prev => prev - 1)}>
+									<Icon src="arrow_l" classNameBg="round" />
+								</span>
 
-							<span onClick={() => setWordNum(prev => prev - 1)}>
-								<Button text="prev" className="ma" />
-							</span>
+								<span onClick={() => setWordNum(prev => prev + randomNum + 1)}>
+									<Icon src="arrow_r" classNameBg="round ml" />
+								</span>
 
-							<span onClick={deleteWord}>
-								<Button text="delete" className="danger ma" />
-							</span>
+								<span onClick={deleteWord}>
+									<Icon src="delete" classNameBg="round ml" />
+								</span>
+							</div>
 						</div>
 
 						{synonym.length > 0 &&
@@ -204,7 +209,7 @@ export default function Answer() {
 						</div>
 
 						<div className="answer">
-							<Input type="text" name="answer" placeholder="answer" value={answer} setValue={setAnswer} maxLength={word.toTranslate.length} />
+							<Input type="text" name="answer" placeholder={`answer (${wordToTranslate.length})`} value={answer} setValue={setAnswer} maxLength={word.toTranslate.length} />
 
 							<div onClick={checkAnswer}>
 								<Button text="check" className="ma" />
