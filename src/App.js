@@ -195,14 +195,10 @@ export default function App() {
 
 			<Lang />
 
-			<div onClick={drop}>
-				<Button text="drop" className="drop danger ma" />
-			</div>
+			<Button text="drop" className="drop danger ma" onClick={drop} />
 
 			{/* back to "add new word" */}
-			<div className="w100" onClick={() => setAnswerStatus("")}>
-				<Icon src="add" classNameBg="m0a mb" />
-			</div>
+			<Icon src="add" classNameBg="m0a mb" onClick={() => setAnswerStatus("")} />
 
 			<div className="StatusBlocks">
 				<StatusBlock status="new" num={calcNum("new") || 0} />

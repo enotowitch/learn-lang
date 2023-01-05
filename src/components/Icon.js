@@ -11,7 +11,7 @@ export default function Icon(props) {
 	const styleImg = props.rotate ? { "transform": "rotate(180deg)" } : { "transform": "rotate(0deg)" }
 
 	return (
-		<button className={`Icon__bg ${props.className} ${props.classNameBg}`}>
+		<button {...props} className={`Icon__bg ${props.className} ${props.classNameBg}`}>
 			<img className={`Icon ${props.className}`} src={src} style={styleImg} />
 		</button>
 	)

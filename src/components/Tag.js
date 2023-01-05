@@ -52,9 +52,7 @@ export default function Tag(props) {
 			{props.mode === "write" &&
 				<div className="Tag__wrap" onClick={toggleActive}>
 					<Input type="textarea" className="Tag" value={tagState} setValue={setTagState} />
-					<div onClick={deleteTag}>
-						<Icon src="del" />
-					</div>
+					<Icon src="del" onClick={deleteTag} />
 				</div>
 			}
 

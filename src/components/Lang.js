@@ -10,9 +10,9 @@ export default function Lang() {
 	return (
 		<div className="lang__wrap ma">
 			<Input type="select" className="lang" value={langFrom} setValue={setLangFrom} />
-			<div onClick={() => (setLangFrom(langTo), setLangTo(langFrom))}>
-				<Icon src="arrow_r" className="bn" />
-			</div>
+
+			<Icon src="arrow_r" className="bn" onClick={() => (setLangFrom(langTo), setLangTo(langFrom))} />
+
 			<Input type="select" className="lang" value={langTo} setValue={setLangTo} />
 		</div>
 	)

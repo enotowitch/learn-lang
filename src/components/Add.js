@@ -27,17 +27,15 @@ export default function Add() {
 			<section className="addSection">
 				<div className="addSection__top">
 
-					<div onClick={clearTranslation}>
-						{wordTranslated && <Icon src="del" classNameBg="mb" />}
-					</div>
+					{wordTranslated && <Icon src="del" classNameBg="m0a mb" onClick={clearTranslation} />}
 
 					<div className="m0a">
 						<Input type="text" className="mb" name="add1" placeholder="new word" value={add1} setValue={setAdd1} />
 						{wordTranslated && <Input type="text" className="mb" name="add2" placeholder="translation" value={add2} setValue={setAdd2} />}
 					</div>
 
-					{!wordTranslated && <div onClick={translate}><Button text="translate" /></div>}
-					{wordTranslated && <div onClick={addFn}><Button text="add" /></div>}
+					{!wordTranslated && <Button text="translate" onClick={translate} />}
+					{wordTranslated && <Button text="add" onClick={addFn} />}
 
 				</div>
 

@@ -103,11 +103,11 @@ export default function Answer() {
 			})
 			setLastCorrectAnswer(answer)
 			// ! color body
-			mistake === 0 && (document.querySelectorAll("body, input, select").forEach(el => el.style.background = "#ACE1AF")) // green = learned
-			mistake === 1 && (document.querySelectorAll("body, input, select").forEach(el => el.style.background = "#fff0c1")) // yellow = repeat
-			mistake > 1 && (document.querySelectorAll("body, input, select").forEach(el => el.style.background = "#ffcbcb")) // red = learn
+			mistake === 0 && (document.querySelectorAll("body, input, .translated").forEach(el => el.style.background = "#ACE1AF")) // green = learned
+			mistake === 1 && (document.querySelectorAll("body, input, .translated").forEach(el => el.style.background = "#fff0c1")) // yellow = repeat
+			mistake > 1 && (document.querySelectorAll("body, input, .translated").forEach(el => el.style.background = "#ffcbcb")) // red = learn
 			setTimeout(() => {
-				document.querySelectorAll("body, input, select").forEach(el => el.style.background = "#efefef") // white
+				document.querySelectorAll("body, input, .translated").forEach(el => el.style.background = "#efefef") // default = white
 			}, 1500);
 			// ? color body
 		}
@@ -211,9 +211,7 @@ export default function Answer() {
 						<div className="answer">
 							<Input type="text" name="answer" placeholder={`answer (${wordToTranslate.length})`} value={answer} setValue={setAnswer} maxLength={word.toTranslate.length} />
 
-							<div onClick={checkAnswer}>
-								<Button text="check" className="ma" />
-							</div>
+							<Button text="check" className="ma" onClick={checkAnswer} />
 
 						</div>
 
