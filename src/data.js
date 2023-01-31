@@ -1,5 +1,5 @@
 const arrOfObjects = []
-Object.keys(localStorage).map(elem => arrOfObjects.push(JSON.parse(localStorage.getItem(elem))))
+Object.keys(localStorage).map(elem => elem !== "lists" && arrOfObjects.push(JSON.parse(localStorage.getItem(elem))))
 
 function compare(a, b) {
 	if (a.id < b.id) {

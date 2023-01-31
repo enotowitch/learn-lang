@@ -1,4 +1,6 @@
 import React, { useContext, useState, useEffect } from "react"
+import get from "../functions/get"
+import save from "../functions/save"
 import { Context } from "./../context"
 import AnswerBlock from "./AnswerBlock"
 import Button from "./Button"
@@ -6,16 +8,19 @@ import Icon from "./Icon"
 import IconText from "./IconText"
 import Input from "./Input"
 import Tags from "./Tags"
+import List from "./List"
 
 export default function Answer() {
 
-	let { words, setWords, answerStatus, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, langFrom, langTo, random, setRandom } = useContext(Context)
+	let { words, setWords, answerStatus, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, langFrom, langTo, random, setRandom, listNum, setListNum, setList, wordAlert } = useContext(Context)
 
 	answer = answer.toLowerCase()
 
-	// ! curWords, word, wordToTranslate, mistake, wordNum, randomNum 
+	// ! curWords, word, wordToTranslate, mistake, wordNum, randomNum, curListName
 	let curWords = []
-	words.map(word => word.status === answerStatus && word.langFrom === langFrom && word.langTo === langTo && (curWords.push(word)))
+	const curListName = get("lists")[listNum]
+
+	words.map(word => word.status === answerStatus && word.langFrom === langFrom && word.langTo === langTo && word.list === curListName && (curWords.push(word)))
 
 	// ! wordNum
 	const [wordNum, setWordNum] = useState(0)
@@ -35,7 +40,7 @@ export default function Answer() {
 	useEffect(() => {
 		setMistake(0)
 	}, [wordNum, answerStatus, lastCorrectAnswer])
-	// ? curWords, word, wordToTranslate, mistake, wordNum, randomNum 
+	// ? curWords, word, wordToTranslate, mistake, wordNum, randomNum, curListName 
 
 	// ! answerBlocks length & put '?' to answerBlock 
 	let calcQuestionMarks = []
@@ -99,7 +104,7 @@ export default function Answer() {
 		if (wordToTranslate === answer) {
 			words.map(wordObj => {
 				wordObj.toTranslate === answer && (wordObj.status = calculatedStatus)
-				wordObj.toTranslate === answer && localStorage.setItem(wordObj.id, JSON.stringify(wordObj))
+				wordObj.toTranslate === answer && save(wordObj.id, wordObj)
 			})
 			setLastCorrectAnswer(answer)
 			// ! color body
@@ -148,16 +153,35 @@ export default function Answer() {
 	// go to random word if no next word
 	!wordToTranslate && curWords.length > 0 && setWordNum(randomNum)
 
+	// ! prevList, nextList
+	function prevList() {
+		setListNum(prev => prev > 0 ? prev - 1 : 0)
+		setList(get("lists")[listNum - 1]) // set list name to list__input 
+	}
+	function nextList() {
+		const listLength = get("lists").length - 1
+		setListNum(prev => prev < listLength ? prev + 1 : listLength)
+		setList(get("lists")[listNum + 1]) // set list name to list__input 
+	}
+	// ? prevList, nextList
+
 
 	// ! RETURN
 	return (
 		<section className="answerSection">
 
+			<div className="fcc mb">
+				<Icon src="arrow_l" onClick={prevList} classNameBg="mr" />
+				<List search="true" />
+				<Icon src="arrow_r" onClick={nextList} classNameBg="m0 ml" />
+			</div>
+
 			{
 				curWords.length > 0 && wordToTranslate ?
 					<>
 
-						<IconText src={random ? "on" : "off"} text="Random" className="random" classNameBg="bshn" bullFn={setRandom} />
+						{/* todo put to menu */}
+						{/* <IconText src={random ? "on" : "off"} text="Random" className="random" classNameBg="bshn" bullFn={setRandom} /> */}
 
 						<div className="translated">
 							<div className="translated__word">
@@ -219,8 +243,10 @@ export default function Answer() {
 							<div className="circle ml" onClick={() => alert(`0 mistakes: Learned\n1 mistake: Repeat\n2 & more mistakes: Learn`)}>?</div>
 						</div>
 					</>
+
 					:
-					<div className="noWords">No words left</div>
+
+					<div className="wordAlert">{wordAlert}</div>
 			}
 
 		</section>

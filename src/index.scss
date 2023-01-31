@@ -10,8 +10,10 @@ $mainColor: #efefef;
 $darkColor: #000;
 $activeColor: #ACE1AF;
 $dangerColor: tomato;
-// width
-$inputWidth: 150px;
+// width & height
+$inputSmallWidth: 150px;
+$inputBigWidth: 250px;
+$inputHeight: 40px;
 // boxShadow
 $boxShadowActive: inset -2px -2px 6px rgba(255, 255, 255, .7),
 inset -2px -2px 4px rgba(255, 255, 255, .5),
@@ -76,14 +78,14 @@ button:active {
 }
 [type="text"] {
 	display: block;
-	width: 250px;
+	width: $inputBigWidth;
 	border: none;
 	padding: 0;
 	text-align: left !important;
 	font-size: $inputFontSize;
 	text-indent: 8px;
 	outline: none;
-	height: 40px;
+	height: $inputHeight;
 	box-shadow: inset 2px 2px 5px #babecc,
 	inset -5px -5px 10px #ffffff73;
 }
@@ -112,7 +114,7 @@ button:active {
 		margin: 5px;
 	}
 } 
-.StatusBlocks, .addSection, .addSection__top, .translated, .answerBlocks, .answer, .mistake, .noWords, .Tags, .IconText, .usage, .buttons, .translated__word {
+.StatusBlocks, .addSection, .addSection__top, .translated, .answerBlocks, .answer, .mistake, .wordAlert, .Tags, .IconText, .usage, .buttons, .translated__word {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -205,8 +207,8 @@ button:active {
 }
 .IconText{
 	position: relative;
-	min-width: $inputWidth;
-	width: $inputWidth;
+	min-width: $inputSmallWidth;
+	width: $inputSmallWidth;
 	font-size: 1.1rem;
 	margin-bottom: 15px;
 	padding: 30px;
@@ -218,15 +220,15 @@ button:active {
 }
 .Tags{
 	margin-bottom: 20px;
-	min-width: $inputWidth;
-	width: $inputWidth;
+	min-width: $inputSmallWidth;
+	width: $inputSmallWidth;
 }
 .Tag{
 	display: inline-block;
 	border-radius: 4px;
 	margin: 4px;
 	padding: 8px;
-	width: $inputWidth;
+	width: $inputSmallWidth;
 	&_active{
 		background: $activeColor;
 	}
@@ -246,7 +248,7 @@ button:active {
 	}
 }
 .usage {
-	width: $inputWidth * 2;
+	width: $inputSmallWidth * 2;
 	min-height: 1rem;
 	word-break: break-all;
 	overflow: auto;
@@ -298,10 +300,40 @@ button:active {
 		left: 12px;
 	}
 }
+.list{
+	&__wrap{
+		position: relative;
+		width: 250px;
+	}
+	width: $inputSmallWidth;
+	&__input{
+		// width: $inputBigWidth - 38px;
+		width: 100%;
+	}
+	&__icon{
+		height: 38px;
+		width: 38px;
+	}
+	&__options{
+		position: absolute;
+		top: $inputHeight;
+		left: 0;
+		width: 100%;
+		background: darken($mainColor, 3%);
+		max-height: 200px;
+		overflow: auto;
+	}
+	&__option{
+		padding: 10px;
+	}
+}
 // ! other
 // margin all
 .ma{
 	margin: 15px;
+}
+.m0{
+	margin: 0;
 }
 .m0a{
 	margin: 0 auto;
@@ -332,5 +364,28 @@ button:active {
 }
 .bshn{
 	box-shadow: none;
+}
+.rb{
+	border: 2px solid red;
+}
+.f{
+	display: flex;
+}
+.fcc{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.db{
+	display: block;
+}
+.dib{
+	display: inline-block;
+}
+.zi2{
+	z-index: 2;
+}
+.zi3{
+	z-index: 3;
 }
 // ? other
