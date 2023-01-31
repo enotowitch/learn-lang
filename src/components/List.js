@@ -37,7 +37,6 @@ export default function List(props) {
 
 	return (
 		<div className="list__wrap">
-
 			<div className="f">
 				<Input type="text" className="list__input" name="list" placeholder="no list" value={list} setValue={setList} />
 				<Icon src="arrow" onClick={() => setShowLists(prev => !prev)} classNameBg="list__icon" />
