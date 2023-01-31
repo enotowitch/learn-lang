@@ -3,11 +3,12 @@ import { Context } from "../context"
 import Button from "./Button"
 import Icon from "./Icon"
 import Input from "./Input"
+import List from "./List"
 import TagBlock from "./TagBlock"
 
 export default function Add() {
 
-	const { add1, setAdd1, add2, setAdd2, wordTranslated, setWordTranslated, translate, addFn, synonymArr, setSynonymArr, usageArr, setUsageArr } = useContext(Context)
+	const { add1, setAdd1, add2, setAdd2, wordTranslated, setWordTranslated, translate, addFn, synonymArr, setSynonymArr, usageArr, setUsageArr, list, setList } = useContext(Context)
 
 	// ! showSynonym
 	const [showSynonym, setShowSynonym] = useState(true)
@@ -32,10 +33,14 @@ export default function Add() {
 					<div className="m0a">
 						<Input type="text" className="mb" name="add1" placeholder="new word" value={add1} setValue={setAdd1} />
 						{wordTranslated && <Input type="text" className="mb" name="add2" placeholder="translation" value={add2} setValue={setAdd2} />}
+
+						{wordTranslated &&
+							<List />
+						}
 					</div>
 
 					{!wordTranslated && <Button text="translate" onClick={translate} />}
-					{wordTranslated && <Button text="add" onClick={addFn} />}
+					{wordTranslated && <Button text="add" onClick={addFn} className="mt" />}
 
 				</div>
 

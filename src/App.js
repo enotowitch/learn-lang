@@ -15,6 +15,8 @@ import Add from "./components/Add";
 import Lang from "./components/Lang";
 import Button from "./components/Button";
 import Icon from "./components/Icon";
+import save from "./functions/save";
+import get from "./functions/get";
 
 export default function App() {
 
@@ -39,6 +41,8 @@ export default function App() {
 	// ! add1, add2, answer, answerStatus, lastCorrectAnswer, usage
 	const [add1, setAdd1] = useState("")
 	const [add2, setAdd2] = useState("")
+	const [list, setList] = useState("")
+	const [listNum, setListNum] = useState(0)
 	const [answer, setAnswer] = useState("")
 	const [usage, setUsage] = useState("")
 
@@ -135,6 +139,7 @@ export default function App() {
 
 		const add_1 = add1.toLowerCase().trim()
 		const add_2 = add2.toLowerCase().trim()
+		const list_ = list ? list.toLowerCase().trim() : "no list"
 
 		let collectedSynonym = []
 		document.querySelectorAll('.Synonym .Tag').forEach(t => t.innerText.trim() && collectedSynonym.push(t.innerText.trim()))
@@ -145,11 +150,19 @@ export default function App() {
 		words.map(word => word.toTranslate.toLowerCase().trim() === add_1 && word.translated.toLowerCase().trim() === add_2 && (exist = true))
 
 		if (!exist) {
+			// id
 			setLastId(prev => prev + 1)
-			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add_1, "translated": add_2, status: "new", synonym: collectedSynonym, usage: collectedUsage, langFrom, langTo }]))
-			localStorage.setItem(lastId + 1, JSON.stringify({ id: lastId + 1, "toTranslate": add_1, "translated": add_2, status: "new", synonym: JSON.stringify(collectedSynonym), usage: JSON.stringify(collectedUsage), langFrom, langTo }))
+			// save word
+			setWords(prev => ([...prev, { id: lastId + 1, "toTranslate": add_1, "translated": add_2, list: list_, status: "new", synonym: collectedSynonym, usage: collectedUsage, langFrom, langTo }]))
+			save(lastId + 1, { id: lastId + 1, "toTranslate": add_1, "translated": add_2, list: list_, status: "new", synonym: JSON.stringify(collectedSynonym), usage: JSON.stringify(collectedUsage), langFrom, langTo })
+			// save list
+			const oldLists = get("lists")
+			oldLists && !oldLists.includes(list_) && save("lists", [...oldLists, list_])
+			!oldLists && save("lists", [list_])
+			// null inputs
 			setAdd1("")
 			setAdd2("")
+			// null other
 			setWordTranslated(false)
 			setSynonymArr([])
 			setUsageArr([])
@@ -191,7 +204,7 @@ export default function App() {
 
 	// ! RETURN
 	return (
-		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, synonymArr, setSynonymArr, usageArr, setUsageArr, usage, setUsage, langFrom, setLangFrom, langTo, setLangTo, setWordTranslated, random, setRandom }} >
+		<Context.Provider value={{ words, setWords, answerStatus, setAnswerStatus, add1, setAdd1, add2, setAdd2, wordTranslated, translate, addFn, answer, setAnswer, lastCorrectAnswer, setLastCorrectAnswer, synonymArr, setSynonymArr, usageArr, setUsageArr, usage, setUsage, langFrom, setLangFrom, langTo, setLangTo, setWordTranslated, random, setRandom, list, setList, listNum, setListNum }} >
 
 			<Lang />
 
